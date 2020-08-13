@@ -1,17 +1,16 @@
 package org.jsantamariap.eh_ho
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.view.View
 
-class MainActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
 
-        val button: Button = findViewById(R.id.button_login)
+        //val button: Button = findViewById(R.id.button_login)
 
         // 1. Listener a partir definición de interfaz a partir de una clase
         //button.setOnClickListener(Listener())
@@ -40,12 +39,32 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(it?.context, "Hola lambda breve", Toast.LENGTH_SHORT).show()
         }
          */
-        val inputUsername: EditText = findViewById(R.id.input_username)
 
+        //val inputUsername: EditText = findViewById(R.id.input_username)
+
+        /*
         button.setOnClickListener {
-            Toast.makeText(it?.context, "Welcome to Eh-Ho ${inputUsername.text}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                it?.context,
+                "Welcome to Eh-Ho ${inputUsername.text}",
+                Toast.LENGTH_SHORT
+            ).show()
         }
+         */
 
+        /*
+        button.setOnClickListener {
+            val intent: Intent = Intent(this, TopicsActivity::class.java)
+            startActivity(intent)
+        }
+         */
+
+    }
+
+    fun showTopics(view: View) {
+        // el view hace referencia al propio button
+        val intent: Intent = Intent(this, TopicsActivity::class.java)
+        startActivity(intent)
     }
 }
 
