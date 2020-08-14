@@ -25,7 +25,8 @@ class PostsActivity : AppCompatActivity() {
 
         // opcion2
         topic?.let {
-            labelTitle.text = topic.title
+            val texto = "Probando nuevo formato ${it.title}"
+            labelTitle.text = texto
         }
     }
 }
