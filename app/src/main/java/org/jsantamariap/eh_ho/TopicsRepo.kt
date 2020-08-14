@@ -42,11 +42,16 @@ object TopicsRepo {
     // función inline
     // variante sin saber tipo que devuelve
     // fun createDummyTopics(count: Int = 10) =
-    fun createDummyTopics(count: Int = 10): List<Topic> =
+    fun createDummyTopics(count: Int = 20): List<Topic> =
         (0..count).map {
             Topic(
                 title = "Topic $it",
                 content = "Content $it"
             )
         }
+
+    // otro uso de una funcion inline
+    fun getTopic(id: String): Topic? = topics.find {
+        it.id == id
+    }
 }
