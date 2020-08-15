@@ -3,11 +3,16 @@ package org.jsantamariap.eh_ho.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import org.jsantamariap.eh_ho.R
-import org.jsantamariap.eh_ho.TopicsActivity
+import org.jsantamariap.eh_ho.topics.TopicsActivity
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(),
+    SignInFragment.SignInInteractionListener,
+    SignUpFragment.SignUpInteractionListener {
+
+    val signUpFragment: SignUpFragment = SignUpFragment()
+    val signInFragment: SignInFragment = SignInFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -68,7 +73,8 @@ class LoginActivity : AppCompatActivity() {
         if (isFirsTimeCreated(savedInstanceState)) {
             // creación del fragment
             // punto 3, crear instancia del fragment
-            val signInFragment = SignInFragment()
+            // ya no haría falta puesto que los creo al principio
+            //val signInFragment = SignInFragment()
             // punto 4, añadir instancia al UI con ayuda de FragmentManager
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragmentContainer, signInFragment)
@@ -97,10 +103,49 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    fun showTopics(view: View) {
+    // deja de usarse, antes estaba directamente con onclick en el xml
+    // porque es una actividad. Ahora estará en un fragment que no puede
+    // usar el onclick del xml y tiene que crearse en su propio código
+    //fun showTopics(view: View) {
+    // cuando estaba desde el xml si que era con view, sino casca
+    // ahora como lo hacemos desde el onclick del fragment no hace falta el
+    // parámetro view. De hecho antes tampoco se estaba usando aunque era
+    // obligatorio ponerlo
+    private fun showTopics() {
         // el view hace referencia al propio button
         val intent: Intent = Intent(this, TopicsActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun onGoToSignUp() {
+        // se está generando un nuevo fragmento por cada click
+        /*
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, SignUpFragment())
+            .commit()
+         */
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, signUpFragment)
+            .commit()
+    }
+
+    override fun onSignIn() {
+        showTopics()
+    }
+
+    override fun onGoToSignIn() {
+        // se está generando un nuevo fragmento por cada click
+        /*
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, SignInFragment())
+            .commit()
+         */
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, signInFragment)
+            .commit()
+    }
+
+    override fun onSignUp() {
     }
 }
 

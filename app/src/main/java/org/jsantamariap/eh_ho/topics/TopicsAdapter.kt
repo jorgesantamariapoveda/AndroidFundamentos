@@ -1,11 +1,12 @@
-package org.jsantamariap.eh_ho
+package org.jsantamariap.eh_ho.topics
 
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_topic.view.*
+import org.jsantamariap.eh_ho.R
+import org.jsantamariap.eh_ho.Topic
 import org.jsantamariap.eh_ho.login.inflate
 
 class TopicsAdapter(val topicClickListener: ((Topic) -> Unit)? = null) :

@@ -1,4 +1,4 @@
-package org.jsantamariap.eh_ho
+package org.jsantamariap.eh_ho.topics
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,8 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 // con el siguiente import se evita el uso de findViewById
 import kotlinx.android.synthetic.main.activity_topics.*
+import org.jsantamariap.eh_ho.*
+import org.jsantamariap.eh_ho.login.isFirsTimeCreated
 
-class TopicsActivity : AppCompatActivity() {
+const val TRANSACTION_CREATE_TOPIC = "create_topic"
+
+class TopicsActivity : AppCompatActivity(),
+    TopicsFragment.TopicsInteractionListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_topics)
@@ -22,11 +27,18 @@ class TopicsActivity : AppCompatActivity() {
         val list: RecyclerView = findViewById(R.id.list_topics)
         list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
          */
+
+        // comentado tras realizar el refactor para que esté dentro
+        // de un fragment
+        /*
         listTopics.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         // creación adapter y asignacion a listTopics
         val adapter = TopicsAdapter {
-            Log.d(TopicsActivity::class.java.canonicalName, it.title)
+            Log.d(
+                TopicsActivity::class.java.canonicalName,
+                it.title
+            )
 
             // Pasando datos entre actividades
             goToPosts(it)
@@ -34,6 +46,12 @@ class TopicsActivity : AppCompatActivity() {
         adapter.setTopics(TopicsRepo.topics)
 
         listTopics.adapter = adapter
+         */
+
+        if (isFirsTimeCreated(savedInstanceState))
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_container, TopicsFragment())
+                .commit()
     }
 
     private fun goToPosts(topic: Topic) {
@@ -45,5 +63,17 @@ class TopicsActivity : AppCompatActivity() {
         //intent.putExtra("TOPIC_ID", topic.id)
         intent.putExtra(EXTRA_TOPIC_ID, topic.id)
         startActivity(intent)
+    }
+
+    override fun onCreateTopic() {
+        // crear pila con addToBackStack
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, CreateTopicFragment())
+            .addToBackStack(TRANSACTION_CREATE_TOPIC)
+            .commit()
+    }
+
+    override fun onShowPosts(topic: Topic) {
+        goToPosts(topic)
     }
 }
