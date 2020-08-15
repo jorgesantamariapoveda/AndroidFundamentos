@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_topic.view.*
+import org.jsantamariap.eh_ho.login.inflate
 
 class TopicsAdapter(val topicClickListener: ((Topic) -> Unit)? = null) :
     RecyclerView.Adapter<TopicsAdapter.TopicHolder>() {
@@ -41,8 +42,13 @@ class TopicsAdapter(val topicClickListener: ((Topic) -> Unit)? = null) :
 
         // el parent realmente es la lista (el recyclerview) y como vista que es tiene
         // acceso al contexto
-        val context = parent.context
-        val view = LayoutInflater.from(context).inflate(R.layout.item_topic, parent, false)
+        // val context = parent.context
+        // primera aproximación
+        //val view = LayoutInflater.from(context).inflate(R.layout.item_topic, parent, false)
+        // o directamente
+        //val view = LayoutInflater.from(parent.context).inflate(R.layout.item_topic, parent, false)
+        // mejora con el uso de extension
+        val view = parent.inflate(R.layout.item_topic)
 
         return TopicHolder(view)
     }
