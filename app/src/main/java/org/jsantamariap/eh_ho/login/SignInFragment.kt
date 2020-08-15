@@ -25,7 +25,7 @@ class SignInFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        container?.inflate(R.layout.fragment_sign_in)
+        return container?.inflate(R.layout.fragment_sign_in)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
