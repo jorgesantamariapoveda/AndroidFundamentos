@@ -1,9 +1,11 @@
-package org.jsantamariap.eh_ho
+package org.jsantamariap.eh_ho.login
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import org.jsantamariap.eh_ho.R
+import org.jsantamariap.eh_ho.TopicsActivity
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +61,41 @@ class LoginActivity : AppCompatActivity() {
         }
          */
 
+        // el if es para evitar el repintado
+        // modo 1
+        //if (savedInstanceState == null) {
+        // modo 2 (usando extensiones)
+        if (isFirsTimeCreated(savedInstanceState)) {
+            // creación del fragment
+            // punto 3, crear instancia del fragment
+            val signInFragment = SignInFragment()
+            // punto 4, añadir instancia al UI con ayuda de FragmentManager
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragmentContainer, signInFragment)
+                .commit()
+        }
     }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
 
     fun showTopics(view: View) {
         // el view hace referencia al propio button
