@@ -13,7 +13,8 @@ import org.jsantamariap.eh_ho.login.isFirsTimeCreated
 const val TRANSACTION_CREATE_TOPIC = "create_topic"
 
 class TopicsActivity : AppCompatActivity(),
-    TopicsFragment.TopicsInteractionListener {
+    TopicsFragment.TopicsInteractionListener,
+    CreateTopicFragment.CreateTopicInteractionListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_topics)
@@ -50,7 +51,7 @@ class TopicsActivity : AppCompatActivity(),
 
         if (isFirsTimeCreated(savedInstanceState))
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, TopicsFragment())
+                .add(R.id.fragmentContainer, TopicsFragment())
                 .commit()
     }
 
@@ -68,12 +69,18 @@ class TopicsActivity : AppCompatActivity(),
     override fun onCreateTopic() {
         // crear pila con addToBackStack
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, CreateTopicFragment())
+            .replace(R.id.fragmentContainer, CreateTopicFragment())
             .addToBackStack(TRANSACTION_CREATE_TOPIC)
             .commit()
     }
 
     override fun onShowPosts(topic: Topic) {
         goToPosts(topic)
+    }
+
+    override fun onTopicCreated() {
+        // dentro de la actividad tengo más control de los flujos
+        // por ello se hace aquí y no dentro del fragment
+        supportFragmentManager.popBackStack()
     }
 }

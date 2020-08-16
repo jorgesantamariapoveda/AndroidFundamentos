@@ -5,11 +5,15 @@ object TopicsRepo {
     val topics: MutableList<Topic> = mutableListOf()
         // get custom, justamente debajo de la propiedad (por el uso de field)
         // si se usa directamente topics se produce un stackoverflow, recursiva
+
+        // borrado una vez que se implementó el método addTopic
+        /*
         get() {
             if (field.isEmpty())
                 field.addAll(createDummyTopics())
             return field
         }
+         */
 
 
     // función pura
@@ -53,5 +57,10 @@ object TopicsRepo {
     // otro uso de una funcion inline
     fun getTopic(id: String): Topic? = topics.find {
         it.id == id
+    }
+
+    fun addTopic(title: String, content: String) {
+        val topic = Topic(title = title, content = content)
+        topics.add(topic)
     }
 }
