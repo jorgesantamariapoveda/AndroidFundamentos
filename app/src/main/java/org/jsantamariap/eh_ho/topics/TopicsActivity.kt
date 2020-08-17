@@ -2,11 +2,8 @@ package org.jsantamariap.eh_ho.topics
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 // con el siguiente import se evita el uso de findViewById
-import kotlinx.android.synthetic.main.activity_topics.*
 import org.jsantamariap.eh_ho.*
 import org.jsantamariap.eh_ho.login.isFirsTimeCreated
 
