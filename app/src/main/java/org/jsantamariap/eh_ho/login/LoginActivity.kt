@@ -1,9 +1,14 @@
 package org.jsantamariap.eh_ho.login
 
 import android.content.Intent
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import kotlinx.android.synthetic.main.activity_login.*
 import org.jsantamariap.eh_ho.R
+import org.jsantamariap.eh_ho.SignInModel
+import org.jsantamariap.eh_ho.UserRepo
 import org.jsantamariap.eh_ho.topics.TopicsActivity
 
 class LoginActivity : AppCompatActivity(),
@@ -71,6 +76,19 @@ class LoginActivity : AppCompatActivity(),
         //if (savedInstanceState == null) {
         // modo 2 (usando extensiones)
         if (isFirsTimeCreated(savedInstanceState)) {
+            checkSession()
+        }
+    }
+
+    private fun checkSession() {
+        if (UserRepo.isLogged(this.applicationContext)) {
+            showTopics()
+        } else {
+            // tras hacer lo del shared preferences reemplazamos el código por
+            // la llamada a onGoToSignIn, en lugar de add es replace pero llama
+            // al mismo fragment
+            onGoToSignIn()
+            /*
             // creación del fragment
             // punto 3, crear instancia del fragment
             // ya no haría falta puesto que los creo al principio
@@ -79,6 +97,7 @@ class LoginActivity : AppCompatActivity(),
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragmentContainer, signInFragment)
                 .commit()
+             */
         }
     }
 
@@ -115,6 +134,11 @@ class LoginActivity : AppCompatActivity(),
         // el view hace referencia al propio button
         val intent: Intent = Intent(this, TopicsActivity::class.java)
         startActivity(intent)
+        // se añadió en la última sesión cuando implementamos el menú logout
+        // esto es para eliminar de la pila, la actividad sino cuando volvemos
+        // desde la pantalla de login seguirá estando una vez realizado
+        // el logout
+        finish()
     }
 
     override fun onGoToSignUp() {
@@ -129,8 +153,12 @@ class LoginActivity : AppCompatActivity(),
             .commit()
     }
 
-    override fun onSignIn() {
-        showTopics()
+    override fun onSignIn(signInModel: SignInModel) {
+        // Antes de añadir el progress bar era esta la única llamada
+        //showTopics()
+
+        enableLoading()
+        simulateLoading(signInModel)
     }
 
     override fun onGoToSignIn() {
@@ -146,7 +174,73 @@ class LoginActivity : AppCompatActivity(),
     }
 
     override fun onSignUp() {
+        enableLoading()
+        //simulateLoading()
     }
+
+    private fun enableLoading(enable: Boolean = true) {
+        if (enable) {
+            fragmentContainer.visibility = View.INVISIBLE
+            viewLoading.visibility = View.VISIBLE
+        } else {
+            fragmentContainer.visibility = View.VISIBLE
+            viewLoading.visibility = View.INVISIBLE
+        }
+    }
+
+    // modo arcaico1: handler->thread explícitos
+    private fun simulateLoading(signInModel: SignInModel) {
+        val runnable = Runnable {
+            Thread.sleep(3000)
+            viewLoading.post {
+                showTopics()
+                // a las preferencias siempre el contexto de la app y no de la
+                // actividad
+                UserRepo.signIn(this.applicationContext, signInModel.username)
+            }
+        }
+        Thread(runnable).start()
+    }
+
+    // modo arcaico2: sync task (mecanismo nativo android)
+    /*
+    private fun simulateLoading() {
+        //argumentos tarea segundo plano
+        //argumentos progress
+        //argumentos finalizacion tares
+        // se crea una clase anonima
+
+        val task = object : AsyncTask<Long, Void, Boolean>() {
+            // vararg en listado de argumentos es decir un array
+            override fun doInBackground(vararg time: Long?): Boolean {
+                Thread.sleep(time[0] ?: 3000)
+                return true
+            }
+
+            override fun onPostExecute(result: Boolean?) {
+                super.onPostExecute(result)
+                showTopics()
+            }
+        }
+        task.execute(5000)
+
+        // uso con tipos Any como parametros tarea segundo plano
+        val task = object : AsyncTask<Any, Void, Boolean>() {
+            // vararg en listado de argumentos es decir un array
+            override fun doInBackground(vararg time: Any?): Boolean {
+                val second = time[1] as String?
+                Thread.sleep(time[0] as Long ?: 3000)
+                return true
+            }
+
+            override fun onPostExecute(result: Boolean?) {
+                super.onPostExecute(result)
+                showTopics()
+            }
+        }
+        task.execute(5000, "hola mundo")
+    }
+    */
 }
 
 // 1. Definición de interfaz a partir de una clase

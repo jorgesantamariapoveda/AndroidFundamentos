@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 // con el siguiente import se evita el uso de findViewById
 import org.jsantamariap.eh_ho.*
+import org.jsantamariap.eh_ho.login.LoginActivity
 import org.jsantamariap.eh_ho.login.isFirsTimeCreated
 
 const val TRANSACTION_CREATE_TOPIC = "create_topic"
@@ -73,6 +74,16 @@ class TopicsActivity : AppCompatActivity(),
 
     override fun onShowPosts(topic: Topic) {
         goToPosts(topic)
+    }
+
+    override fun onLogout() {
+        // 1.- borrar datos del usuario del shared preferences
+        UserRepo.logout(this.applicationContext)
+        // 2.- volver a la pantalla de login activity_login
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish() // super importante, con esto TopicsActivity se destruye
+        // de la pila de actividades
     }
 
     override fun onTopicCreated() {

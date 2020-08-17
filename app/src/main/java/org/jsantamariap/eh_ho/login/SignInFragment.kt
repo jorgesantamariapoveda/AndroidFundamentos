@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 import org.jsantamariap.eh_ho.R
+import org.jsantamariap.eh_ho.SignInModel
 import java.lang.IllegalArgumentException
 
 class SignInFragment: Fragment() {
@@ -71,7 +72,11 @@ class SignInFragment: Fragment() {
 
         buttonLogin.setOnClickListener {
             //loginActivity?.showTopics()
-            signInInteractionListener?.onSignIn()
+            val signInModel = SignInModel(
+                inputUsername.text.toString(),
+                inputPassword.text.toString()
+            )
+            signInInteractionListener?.onSignIn(signInModel)
         }
 
         labelCreateAccount.setOnClickListener {
@@ -83,7 +88,7 @@ class SignInFragment: Fragment() {
     // Definimos la interface que implementará la activity
     interface SignInInteractionListener {
         fun onGoToSignUp()
-        fun onSignIn()
+        fun onSignIn(signInModel: SignInModel)
     }
 
 }

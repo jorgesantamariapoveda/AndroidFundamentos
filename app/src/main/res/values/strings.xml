@@ -43,5 +43,7 @@
     </plurals>
 
     <string name="minutes_zero">Just now</string>
+    <string name="label_loading">Loading</string>
+    <string name="label_logout">Logout</string>
 
 </resources>
