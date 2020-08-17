@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.item_topic.view.*
 import org.jsantamariap.eh_ho.R
 import org.jsantamariap.eh_ho.Topic
 import org.jsantamariap.eh_ho.login.inflate
+import java.util.*
 
 class TopicsAdapter(val topicClickListener: ((Topic) -> Unit)? = null) :
     RecyclerView.Adapter<TopicsAdapter.TopicHolder>() {
@@ -101,11 +102,55 @@ class TopicsAdapter(val topicClickListener: ((Topic) -> Unit)? = null) :
                 // antes de hacer el import kotlinx.android.synthetic.main.item_topic.view.*
                 // itemView.findViewById<TextView>(R.id.label_topic).setText(field?.title)
                 // gracias al import
-                itemView.labelTopic.text = field?.title
+                itemView.labelTitle.text = field?.title
 
                 // esto es para el tema del onClick mediante el listener
                 // en la propiedad tag es Any! con la ventaja que ello conlleva
                 itemView.tag = field
+
+                // seguimos asignando nuevos valores
+                // Primera aproximacion, pero la funcion setTimeOffSet se queja
+                /*
+                itemView.labelPosts.text = field?.posts.toString()
+                itemView.labelViews.text = field?.views.toString()
+                setTimeOffSet(field?.getTimeOffSet())
+                */
+                // Segunda aproximacion, se sigue quejando
+                /*
+                if (field != null) {
+                    itemView.labelPosts.text = field.posts.toString()
+                    itemView.labelViews.text = field.views.toString()
+                    setTimeOffSet(field.getTimeOffSet())
+                }
+                */
+                // Tercera aproximacion, nuevo operador kotlin
+                field?.let {
+                    itemView.labelPosts.text = it.posts.toString()
+                    itemView.labelViews.text = it.views.toString()
+                    setTimeOffSet(it.getTimeOffSet())
+                }
             }
+
+        private fun setTimeOffSet(timeOffSet: Topic.TimeOffSet) {
+            // la evaluación de un when devuelve algo
+            val quantityString = when (timeOffSet.unit) {
+                Calendar.YEAR -> R.plurals.years
+                Calendar.MONTH -> R.plurals.months
+                Calendar.DAY_OF_MONTH -> R.plurals.days
+                Calendar.HOUR -> R.plurals.hours
+                else -> R.plurals.minutes
+            }
+
+            if (timeOffSet.amount == 0) {
+                itemView.labelDate.text =
+                    itemView.context.resources.getString(R.string.minutes_zero)
+            } else {
+                itemView.labelDate.text = itemView.context.resources.getQuantityString(
+                    quantityString,
+                    timeOffSet.amount,
+                    timeOffSet.amount
+                )
+            }
+        }
     }
 }

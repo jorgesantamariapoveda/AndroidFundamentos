@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_topics.*
 import org.jsantamariap.eh_ho.R
@@ -55,6 +56,9 @@ class TopicsFragment : Fragment() {
         adapter.setTopics(TopicsRepo.topics)
 
         listTopics.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        // esto añade una linea tras cada topic
+        listTopics.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+
         listTopics.adapter = adapter
 
         buttonCreateTopic.setOnClickListener {
