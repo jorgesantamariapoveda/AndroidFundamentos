@@ -1,12 +1,11 @@
 package org.jsantamariap.eh_ho
 
+import org.jsantamariap.eh_ho.data.Topic
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.lang.Exception
 import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.assert as assert1
 
 class TopicModelTest {
     @Test

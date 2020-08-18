@@ -1,4 +1,4 @@
-package org.jsantamariap.eh_ho
+package org.jsantamariap.eh_ho.data
 
 import java.util.*
 
@@ -29,19 +29,34 @@ data class Topic(
         val difference = currentDate - this.date.time
 
         val years = difference / YEAR_MILLIS
-        if (years > 0) return TimeOffSet(years.toInt(), Calendar.YEAR)
+        if (years > 0) return TimeOffSet(
+            years.toInt(),
+            Calendar.YEAR
+        )
 
         val months = difference / MONTH_MILLIS
-        if (months > 0) return TimeOffSet(months.toInt(), Calendar.MONTH)
+        if (months > 0) return TimeOffSet(
+            months.toInt(),
+            Calendar.MONTH
+        )
 
         val days = difference /DAY_MILLIS
-        if (days > 0) return TimeOffSet(days.toInt(), Calendar.DAY_OF_MONTH)
+        if (days > 0) return TimeOffSet(
+            days.toInt(),
+            Calendar.DAY_OF_MONTH
+        )
 
         val hours = difference / HOUR_MILLIS
-        if (hours > 0) return TimeOffSet(hours.toInt(), Calendar.HOUR)
+        if (hours > 0) return TimeOffSet(
+            hours.toInt(),
+            Calendar.HOUR
+        )
 
         val minutes = difference / MINUTE_MILLIS
-        if (minutes > 0) return TimeOffSet(minutes.toInt(), Calendar.MINUTE)
+        if (minutes > 0) return TimeOffSet(
+            minutes.toInt(),
+            Calendar.MINUTE
+        )
 
         return TimeOffSet(0, Calendar.MINUTE)
     }

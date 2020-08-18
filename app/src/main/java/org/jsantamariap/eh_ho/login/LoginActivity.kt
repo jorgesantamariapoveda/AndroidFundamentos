@@ -1,14 +1,16 @@
 package org.jsantamariap.eh_ho.login
 
 import android.content.Intent
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jsantamariap.eh_ho.R
-import org.jsantamariap.eh_ho.SignInModel
-import org.jsantamariap.eh_ho.UserRepo
+import org.jsantamariap.eh_ho.data.RequestError
+import org.jsantamariap.eh_ho.data.SignInModel
+import org.jsantamariap.eh_ho.data.UserRepo
+import org.jsantamariap.eh_ho.isFirsTimeCreated
 import org.jsantamariap.eh_ho.topics.TopicsActivity
 
 class LoginActivity : AppCompatActivity(),
@@ -158,7 +160,27 @@ class LoginActivity : AppCompatActivity(),
         //showTopics()
 
         enableLoading()
-        simulateLoading(signInModel)
+        UserRepo.signIn(
+            this.applicationContext,
+            signInModel,
+            { showTopics() },
+            { error ->
+                enableLoading(false)
+                handleError(error)
+            }
+        )
+        //simulateLoading(signInModel)
+    }
+
+    private fun handleError(error: RequestError) {
+        if (error.messageResId != null) {
+            // container es un id del activity_login.xml
+            Snackbar.make(container, error.messageResId, Snackbar.LENGTH_LONG).show()
+        } else if (error.message != null) {
+            Snackbar.make(container, error.message, Snackbar.LENGTH_LONG).show()
+        } else {
+            Snackbar.make(container, R.string.error_default, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     override fun onGoToSignIn() {
@@ -189,6 +211,7 @@ class LoginActivity : AppCompatActivity(),
     }
 
     // modo arcaico1: handler->thread explícitos
+    /*
     private fun simulateLoading(signInModel: SignInModel) {
         val runnable = Runnable {
             Thread.sleep(3000)
@@ -196,11 +219,12 @@ class LoginActivity : AppCompatActivity(),
                 showTopics()
                 // a las preferencias siempre el contexto de la app y no de la
                 // actividad
-                UserRepo.signIn(this.applicationContext, signInModel.username)
+                UserRepo.signIn(this.applicationContext, signInModel)
             }
         }
         Thread(runnable).start()
     }
+    */
 
     // modo arcaico2: sync task (mecanismo nativo android)
     /*

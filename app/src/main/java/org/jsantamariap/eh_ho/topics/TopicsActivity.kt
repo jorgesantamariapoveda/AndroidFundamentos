@@ -5,8 +5,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 // con el siguiente import se evita el uso de findViewById
 import org.jsantamariap.eh_ho.*
+import org.jsantamariap.eh_ho.data.Topic
+import org.jsantamariap.eh_ho.data.UserRepo
 import org.jsantamariap.eh_ho.login.LoginActivity
-import org.jsantamariap.eh_ho.login.isFirsTimeCreated
+import org.jsantamariap.eh_ho.isFirsTimeCreated
 
 const val TRANSACTION_CREATE_TOPIC = "create_topic"
 

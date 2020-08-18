@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_topics.*
 import org.jsantamariap.eh_ho.R
-import org.jsantamariap.eh_ho.Topic
-import org.jsantamariap.eh_ho.TopicsRepo
-import org.jsantamariap.eh_ho.login.inflate
+import org.jsantamariap.eh_ho.data.Topic
+import org.jsantamariap.eh_ho.data.TopicsRepo
+import org.jsantamariap.eh_ho.inflate
 import java.lang.IllegalArgumentException
 
 class TopicsFragment : Fragment() {

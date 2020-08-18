@@ -6,8 +6,8 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_create_topic.*
 import org.jsantamariap.eh_ho.R
-import org.jsantamariap.eh_ho.TopicsRepo
-import org.jsantamariap.eh_ho.login.inflate
+import org.jsantamariap.eh_ho.data.TopicsRepo
+import org.jsantamariap.eh_ho.inflate
 import java.lang.IllegalArgumentException
 
 class CreateTopicFragment : Fragment() {

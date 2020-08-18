@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 import org.jsantamariap.eh_ho.R
-import org.jsantamariap.eh_ho.SignInModel
+import org.jsantamariap.eh_ho.data.SignInModel
+import org.jsantamariap.eh_ho.inflate
 import java.lang.IllegalArgumentException
 
 class SignInFragment: Fragment() {

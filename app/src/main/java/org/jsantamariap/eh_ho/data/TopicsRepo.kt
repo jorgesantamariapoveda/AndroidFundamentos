@@ -1,4 +1,4 @@
-package org.jsantamariap.eh_ho
+package org.jsantamariap.eh_ho.data
 
 // object se usa para patrón de diseño Singleton
 object TopicsRepo {
@@ -60,7 +60,8 @@ object TopicsRepo {
     }
 
     fun addTopic(title: String, content: String) {
-        val topic = Topic(title = title, content = content)
+        val topic =
+            Topic(title = title, content = content)
         topics.add(topic)
     }
 }

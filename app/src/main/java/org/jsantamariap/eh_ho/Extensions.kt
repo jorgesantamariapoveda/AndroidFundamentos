@@ -1,4 +1,4 @@
-package org.jsantamariap.eh_ho.login
+package org.jsantamariap.eh_ho
 
 import android.os.Bundle
 import android.view.LayoutInflater

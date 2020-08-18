@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 import org.jsantamariap.eh_ho.R
+import org.jsantamariap.eh_ho.inflate
 import java.lang.IllegalArgumentException
 
 class SignUpFragment: Fragment() {

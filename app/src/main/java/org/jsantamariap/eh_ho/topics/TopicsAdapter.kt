@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_topic.view.*
 import org.jsantamariap.eh_ho.R
-import org.jsantamariap.eh_ho.Topic
-import org.jsantamariap.eh_ho.login.inflate
+import org.jsantamariap.eh_ho.data.Topic
+import org.jsantamariap.eh_ho.inflate
 import java.util.*
 
 class TopicsAdapter(val topicClickListener: ((Topic) -> Unit)? = null) :
