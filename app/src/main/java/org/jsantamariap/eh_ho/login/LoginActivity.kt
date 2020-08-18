@@ -175,10 +175,15 @@ class LoginActivity : AppCompatActivity(),
     private fun handleError(error: RequestError) {
         if (error.messageResId != null) {
             // container es un id del activity_login.xml
+            // esta opción es la ideal, un texto que nosotros creamos y le pasamos el id
+            // para que esté traducido
             Snackbar.make(container, error.messageResId, Snackbar.LENGTH_LONG).show()
         } else if (error.message != null) {
+            // este caso es cuando el texto nos lo envía el servidor
             Snackbar.make(container, error.message, Snackbar.LENGTH_LONG).show()
         } else {
+            // último caso en el cual el servidor no nos devolvió nada, por ejemplo podría
+            // ser un timeout
             Snackbar.make(container, R.string.error_default, Snackbar.LENGTH_LONG).show()
         }
     }
