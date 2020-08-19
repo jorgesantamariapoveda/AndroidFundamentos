@@ -101,6 +101,45 @@ object UserRepo {
         // 3.- otorgar permisos internet -> manifest.xml
     }
 
+    fun signUp(
+        context: Context,
+        signUpModel: SignUpModel,
+        success: (SignUpModel) -> Unit,
+        error: (RequestError) -> Unit
+    ) {
+        val request = PostRequest(
+            Request.Method.POST,
+            ApiRoutes.signUp(),
+            signUpModel.toJson(),
+            { response ->
+                // a veces ocurre que auqneu el servidor devuelva un 200 puede haber algún
+                // error (normalmente de formateo). Por lo que también es interesante consultar
+                // los campos que pueda devolver el body (se pueden ver x.ej desde Postman
+                if (response?.getBoolean("success") == true) {
+                    success(signUpModel)
+                }
+                else {
+                    error(RequestError(message = response?.getString("message")))
+                }
+            },
+            { e ->
+                e.printStackTrace()
+
+                val requestError =
+                    if (e is NetworkError)
+                        RequestError(e, messageResId = R.string.error_not_internet)
+                    else
+                        RequestError(e)
+
+                error(requestError)
+            }
+        )
+
+        ApiRequestQueue
+            .getRequestQueue(context)
+            .add(request)
+    }
+
     private fun saveSession(context: Context, username: String) {
         val preferences = context.getSharedPreferences(PREFERENCES_SESSION, Context.MODE_PRIVATE)
 

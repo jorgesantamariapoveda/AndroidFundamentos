@@ -1,6 +1,7 @@
 package org.jsantamariap.eh_ho.data
 
 import android.net.Uri
+import org.jsantamariap.eh_ho.BuildConfig
 
 object ApiRoutes {
 
@@ -11,8 +12,14 @@ object ApiRoutes {
             .build()
             .toString()
 
+    fun signUp() =
+        uriBuilder()
+            .appendPath("users")
+            .build()
+            .toString()
+
     private fun uriBuilder() =
         Uri.Builder()
             .scheme("https")
-            .authority("mdiscourse.keepcoding.io")
+            .authority(BuildConfig.DiscourseDomain)
 }

@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_login.*
+import org.jsantamariap.eh_ho.BuildConfig
 import org.jsantamariap.eh_ho.R
 import org.jsantamariap.eh_ho.data.RequestError
 import org.jsantamariap.eh_ho.data.SignInModel
+import org.jsantamariap.eh_ho.data.SignUpModel
 import org.jsantamariap.eh_ho.data.UserRepo
 import org.jsantamariap.eh_ho.isFirsTimeCreated
 import org.jsantamariap.eh_ho.topics.TopicsActivity
@@ -17,8 +19,8 @@ class LoginActivity : AppCompatActivity(),
     SignInFragment.SignInInteractionListener,
     SignUpFragment.SignUpInteractionListener {
 
-    val signUpFragment: SignUpFragment = SignUpFragment()
-    val signInFragment: SignInFragment = SignInFragment()
+    private val signUpFragment: SignUpFragment = SignUpFragment()
+    private val signInFragment: SignInFragment = SignInFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -200,9 +202,22 @@ class LoginActivity : AppCompatActivity(),
             .commit()
     }
 
-    override fun onSignUp() {
+    override fun onSignUp(signUpModel: SignUpModel) {
         enableLoading()
         //simulateLoading()
+
+        UserRepo.signUp(
+            this.applicationContext,
+            signUpModel,
+            {
+                enableLoading(false)
+                // Revisar respuesta del servidor
+                Snackbar.make(container, R.string.message_sign_up, Snackbar.LENGTH_LONG).show()
+            },
+            {
+                enableLoading(false)
+                handleError(it)
+            })
     }
 
     private fun enableLoading(enable: Boolean = true) {

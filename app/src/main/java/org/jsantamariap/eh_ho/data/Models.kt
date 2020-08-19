@@ -2,7 +2,7 @@ package org.jsantamariap.eh_ho.data
 
 import java.util.*
 
-// un data class no hace salta los setters y getters
+// un data class no hace falta los setters y getters
 // nos ahorra mucho trabajo
 data class Topic(
     val id: String = UUID.randomUUID().toString(),
@@ -18,9 +18,12 @@ data class Topic(
     val HOUR_MILLIS = MINUTE_MILLIS * 60
     val DAY_MILLIS = HOUR_MILLIS * 24
     val MONTH_MILLIS = DAY_MILLIS * 30
-    val YEAR_MILLIS = MONTH_MILLIS  * 12
+    val YEAR_MILLIS = MONTH_MILLIS * 12
 
-    data class TimeOffSet(val amount: Int, val unit: Int)
+    data class TimeOffSet(
+        val amount: Int,
+        val unit: Int
+    )
 
     // se le pueden añadir funcionalidades extras que no
     // tengan que ver con los setters y getters
@@ -40,7 +43,7 @@ data class Topic(
             Calendar.MONTH
         )
 
-        val days = difference /DAY_MILLIS
+        val days = difference / DAY_MILLIS
         if (days > 0) return TimeOffSet(
             days.toInt(),
             Calendar.DAY_OF_MONTH

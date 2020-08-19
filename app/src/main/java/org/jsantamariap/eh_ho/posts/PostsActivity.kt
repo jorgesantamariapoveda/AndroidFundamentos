@@ -1,9 +1,10 @@
-package org.jsantamariap.eh_ho
+package org.jsantamariap.eh_ho.posts
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_posts.*
+import org.jsantamariap.eh_ho.R
 import org.jsantamariap.eh_ho.data.Topic
 import org.jsantamariap.eh_ho.data.TopicsRepo
 

@@ -9,6 +9,8 @@ import org.jsantamariap.eh_ho.data.Topic
 import org.jsantamariap.eh_ho.data.UserRepo
 import org.jsantamariap.eh_ho.login.LoginActivity
 import org.jsantamariap.eh_ho.isFirsTimeCreated
+import org.jsantamariap.eh_ho.posts.EXTRA_TOPIC_ID
+import org.jsantamariap.eh_ho.posts.PostsActivity
 
 const val TRANSACTION_CREATE_TOPIC = "create_topic"
 

@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class TopicModelTest {
+
     @Test
     fun getOffSet_Year_isCorrect() {
         val dateToCompare: Date = formatDate("01/01/2020 10:00:00")
