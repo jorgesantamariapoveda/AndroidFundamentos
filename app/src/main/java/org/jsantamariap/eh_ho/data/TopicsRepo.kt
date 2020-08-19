@@ -1,19 +1,25 @@
 package org.jsantamariap.eh_ho.data
 
+import android.content.Context
+import com.android.volley.NetworkError
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonObjectRequest
+import org.jsantamariap.eh_ho.R
+
 // object se usa para patrón de diseño Singleton
 object TopicsRepo {
     val topics: MutableList<Topic> = mutableListOf()
-        // get custom, justamente debajo de la propiedad (por el uso de field)
-        // si se usa directamente topics se produce un stackoverflow, recursiva
+    // get custom, justamente debajo de la propiedad (por el uso de field)
+    // si se usa directamente topics se produce un stackoverflow, recursiva
 
-        // borrado una vez que se implementó el método addTopic
-        /*
-        get() {
-            if (field.isEmpty())
-                field.addAll(createDummyTopics())
-            return field
-        }
-         */
+    // borrado una vez que se implementó el método addTopic
+    /*
+    get() {
+        if (field.isEmpty())
+            field.addAll(createDummyTopics())
+        return field
+    }
+     */
 
 
     // función pura
@@ -49,8 +55,7 @@ object TopicsRepo {
     fun createDummyTopics(count: Int = 20): List<Topic> =
         (0..count).map {
             Topic(
-                title = "Topic $it",
-                content = "Content $it"
+                title = "Topic $it"
             )
         }
 
@@ -59,9 +64,38 @@ object TopicsRepo {
         it.id == id
     }
 
-    fun addTopic(title: String, content: String) {
+    fun addTopic(title: String) {
         val topic =
-            Topic(title = title, content = content)
+            Topic(title = title)
         topics.add(topic)
+    }
+
+    fun getTopics(
+        context: Context,
+        onSuccess: (List<Topic>) -> Unit,
+        onError: (RequestError) -> Unit
+    ) {
+        val request = JsonObjectRequest(
+            Request.Method.GET,
+            ApiRoutes.getTopics(),
+            null,
+            {
+                val list = Topic.parseTopicList(it)
+                onSuccess(list)
+            },
+            {
+                it.printStackTrace()
+                val requestError =
+                    if (it is NetworkError)
+                        RequestError(it, messageResId = R.string.error_not_internet)
+                    else
+                        RequestError(it)
+                onError(requestError)
+            }
+        )
+
+        ApiRequestQueue
+            .getRequestQueue(context)
+            .add(request)
     }
 }

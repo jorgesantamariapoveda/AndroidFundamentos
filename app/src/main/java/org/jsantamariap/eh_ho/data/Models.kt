@@ -1,5 +1,7 @@
 package org.jsantamariap.eh_ho.data
 
+import org.json.JSONObject
+import java.text.SimpleDateFormat
 import java.util.*
 
 // un data class no hace falta los setters y getters
@@ -7,7 +9,6 @@ import java.util.*
 data class Topic(
     val id: String = UUID.randomUUID().toString(),
     val title: String,
-    val content: String,
     val date: Date = Date(),
     val posts: Int = 0,
     val views: Int = 0
@@ -62,5 +63,44 @@ data class Topic(
         )
 
         return TimeOffSet(0, Calendar.MINUTE)
+    }
+
+    companion object {
+
+        fun parseTopicList(response: JSONObject): List<Topic> {
+            val objectLis = response.getJSONObject("topic_list")
+                .getJSONArray("topics")
+
+            val topics = mutableListOf<Topic>()
+
+            // lo ideal sería hacer un map pero resulta que no lo está implementado
+            // en los jsonObject, por lo que hay que hacerlo con un for típico
+            for (i in 0 until objectLis.length()) {
+                val parsedTopic = parseTopic(objectLis.getJSONObject(i))
+                topics.add(parsedTopic)
+            }
+
+            return topics
+        }
+
+        fun parseTopic(jsonObject: JSONObject): Topic {
+            //java no puede tratar el tema de las zonas horarios Z
+            // ej 2020-08-13T16:27:00.945Z, entonces vamos a eliminarla
+            val date = jsonObject.getString("created_at")
+                .replace("Z", "+0000")
+
+            // SSSZ -> zona horaria
+            // El locale es la zona local a la cual se va a convertir
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
+            val dateFormatted = dateFormat.parse(date) ?: Date()
+
+            return Topic(
+                id = jsonObject.getInt("id").toString(),
+                title = jsonObject.getString("title"),
+                date = dateFormatted,
+                posts = jsonObject.getInt("posts_count"),
+                views = jsonObject.getInt("views")
+            )
+        }
     }
 }

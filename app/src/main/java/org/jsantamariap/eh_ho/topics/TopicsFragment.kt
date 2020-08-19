@@ -18,6 +18,22 @@ class TopicsFragment : Fragment() {
 
     private var topicsInteractionListener: TopicsInteractionListener? = null
 
+    // además de ser lazy, también es una constante con lo que nos aseguramos
+    // que sea inmutable
+    private val topicsAdapter: TopicsAdapter by lazy {
+        val adapter = TopicsAdapter {
+            Log.d(
+                TopicsActivity::class.java.canonicalName,
+                it.title
+            )
+
+            // Pasando datos entre actividades
+            //goToPosts(it)
+            this.topicsInteractionListener?.onShowPosts(it)
+        }
+        adapter
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -43,10 +59,12 @@ class TopicsFragment : Fragment() {
         return container?.inflate(R.layout.fragment_topics)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // creación adapter y asignacion a listTopics
+        /*
         val adapter = TopicsAdapter {
             Log.d(
                 TopicsActivity::class.java.canonicalName,
@@ -57,16 +75,47 @@ class TopicsFragment : Fragment() {
             //goToPosts(it)
             this.topicsInteractionListener?.onShowPosts(it)
         }
-        adapter.setTopics(TopicsRepo.topics)
+         */
+
+        // comentado, antes de hacer petición al servidor. Una vez lo tenemos, el momento
+        // apropiado para recuperarlos en cuando ya están todos los elementos de la pantalla
+        // cargados, por lo tanto se hará en el onResume
+        //adapter.setTopics(TopicsRepo.topics)
 
         listTopics.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         // esto añade una linea tras cada topic
         listTopics.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        listTopics.adapter = adapter
+        listTopics.adapter = topicsAdapter
 
         buttonCreateTopic.setOnClickListener {
             this.topicsInteractionListener?.onCreateTopic()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        loadTopics()
+    }
+
+    private fun loadTopics() {
+        context?.let {
+            TopicsRepo.getTopics(
+                it.applicationContext,
+                {
+                    // esto quedaba un poco feo, es decir tener que hacer el casting
+                    // así que gracias a AndroidStudio vamos a sacarla como una propiedad Ctrl+T
+                    // para que pueda ser manipulada por el fragmento entero
+                    // Además será de tipo lazy
+                    // Con lo que la siguiente línea la puede comentar
+                    //val adapter = listTopics.adapter as TopicsAdapter
+                    topicsAdapter.setTopics(it)
+                },
+                {
+                    // TODO: manejo de errores (forma parte de la práctica)
+                }
+            )
         }
     }
 

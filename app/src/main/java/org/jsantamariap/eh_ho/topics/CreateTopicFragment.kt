@@ -66,8 +66,7 @@ class CreateTopicFragment : Fragment() {
     private fun createTopic() {
         if (isFormValid()) {
             TopicsRepo.addTopic(
-                inputTitle.text.toString(),
-                inputContent.text.toString()
+                inputTitle.text.toString()
             )
             // esto es un tanto peligroso, pues puede que el fragment no esté
             // en el flujo. La solución es la de siempre, delegar en la actividad

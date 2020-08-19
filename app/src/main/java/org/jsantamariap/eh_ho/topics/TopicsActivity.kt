@@ -17,6 +17,7 @@ const val TRANSACTION_CREATE_TOPIC = "create_topic"
 class TopicsActivity : AppCompatActivity(),
     TopicsFragment.TopicsInteractionListener,
     CreateTopicFragment.CreateTopicInteractionListener {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_topics)
