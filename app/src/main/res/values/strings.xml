@@ -49,5 +49,6 @@
     <string name="error_not_internet">No internet conection</string>
     <string name="error_default">Something bad</string>
     <string name="message_sign_up">Please chech your email to finish process</string>
+    <string name="error_duplicated_topic">Title has been already used</string>
 
 </resources>

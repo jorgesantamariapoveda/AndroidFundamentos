@@ -4,8 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_create_topic.*
 import org.jsantamariap.eh_ho.R
+import org.jsantamariap.eh_ho.data.CreateTopicModel
+import org.jsantamariap.eh_ho.data.RequestError
 import org.jsantamariap.eh_ho.data.TopicsRepo
 import org.jsantamariap.eh_ho.inflate
 import java.lang.IllegalArgumentException
@@ -65,22 +68,58 @@ class CreateTopicFragment : Fragment() {
 
     private fun createTopic() {
         if (isFormValid()) {
+
+            // forma 1, antes de implementar api
+            /*
             TopicsRepo.addTopic(
                 inputTitle.text.toString()
             )
+
             // esto es un tanto peligroso, pues puede que el fragment no esté
             // en el flujo. La solución es la de siempre, delegar en la actividad
             // que contiene ese fragment para que se encargue ella mediante
             // la creación de un interface
+
             // fragmentManager?.popBackStack()
-            interactionListener?.onTopicCreated()
+
+            //interactionListener?.onTopicCreated()
+             */
+
+            // forma 2
+            postTopic()
         } else {
             showError()
         }
     }
-    // realizado con un refactor, Ctrl+T
-    private fun isFormValid() = inputTitle.text.isNotEmpty() &&
-            inputContent.text.isNotEmpty()
+
+    private fun postTopic() {
+        val model = CreateTopicModel(inputTitle.text.toString(), inputContent.text.toString())
+        this.context?.let {
+            TopicsRepo.addTopic(
+                it.applicationContext,
+                model,
+                {
+                    interactionListener?.onTopicCreated()
+                },
+                {
+                    handleError(it)
+                }
+            )
+        }
+    }
+
+    private fun handleError(error: RequestError) {
+        val message =
+            if (error.messageResId != null) {
+                getString(error.messageResId)
+            } else if (error.message != null) {
+                error.message
+            } else {
+                getString(R.string.error_default)
+            }
+
+        Snackbar.make(container, message, Snackbar.LENGTH_LONG).show()
+    }
 
     private fun showError() {
         if (inputTitle.text.isEmpty()) {
@@ -91,6 +130,10 @@ class CreateTopicFragment : Fragment() {
             inputContent.error = context?.getString(R.string.error_empty)
         }
     }
+
+    // realizado con un refactor, Ctrl+T
+    private fun isFormValid() = inputTitle.text.isNotEmpty() &&
+            inputContent.text.isNotEmpty()
 
     interface CreateTopicInteractionListener {
         fun onTopicCreated()

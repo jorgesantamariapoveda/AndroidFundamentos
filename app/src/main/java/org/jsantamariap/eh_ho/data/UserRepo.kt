@@ -111,6 +111,7 @@ object UserRepo {
             Request.Method.POST,
             ApiRoutes.signUp(),
             signUpModel.toJson(),
+            null,
             { response ->
                 // a veces ocurre que auqneu el servidor devuelva un 200 puede haber algún
                 // error (normalmente de formateo). Por lo que también es interesante consultar
@@ -161,5 +162,11 @@ object UserRepo {
 
         val username = preferences.getString(PREFERENCES_USERNAME, null)
         return username != null
+    }
+
+    fun getUsername(context: Context): String? {
+        val preferences = context.getSharedPreferences(PREFERENCES_SESSION, Context.MODE_PRIVATE)
+
+        return preferences.getString(PREFERENCES_USERNAME, null)
     }
 }

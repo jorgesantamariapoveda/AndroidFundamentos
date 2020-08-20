@@ -24,6 +24,12 @@ object ApiRoutes {
             .build()
             .toString()
 
+    fun createTopic() =
+        uriBuilder()
+            .appendPath("posts.json")
+            .build()
+            .toString()
+
     private fun uriBuilder() =
         Uri.Builder()
             .scheme("https")
