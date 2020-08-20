@@ -6,6 +6,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_create_topic.*
+import org.jsantamariap.eh_ho.LoadingDialogFragment
 import org.jsantamariap.eh_ho.R
 import org.jsantamariap.eh_ho.data.CreateTopicModel
 import org.jsantamariap.eh_ho.data.RequestError
@@ -13,9 +14,15 @@ import org.jsantamariap.eh_ho.data.TopicsRepo
 import org.jsantamariap.eh_ho.inflate
 import java.lang.IllegalArgumentException
 
+const val TAG_LOADING_DIALOG = "tag_loadign_dialog"
+
 class CreateTopicFragment : Fragment() {
 
     var interactionListener: CreateTopicInteractionListener? = null
+    private val loadingDialogFragment: LoadingDialogFragment by lazy {
+        val message = getString(R.string.label_creating_topic)
+        LoadingDialogFragment.newInstance(message)
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -93,18 +100,33 @@ class CreateTopicFragment : Fragment() {
     }
 
     private fun postTopic() {
+        enabledLoadingDialog()
+
         val model = CreateTopicModel(inputTitle.text.toString(), inputContent.text.toString())
         this.context?.let {
             TopicsRepo.addTopic(
                 it.applicationContext,
                 model,
                 {
+                    enabledLoadingDialog(false)
                     interactionListener?.onTopicCreated()
                 },
                 {
+                    enabledLoadingDialog(false)
                     handleError(it)
                 }
             )
+        }
+    }
+
+    private fun enabledLoadingDialog(enabled: Boolean = true) {
+        if (enabled) {
+            // el manejador se hará cargo del diálogo
+            fragmentManager?.let {
+                loadingDialogFragment.show(it, TAG_LOADING_DIALOG)
+            }
+        } else {
+            loadingDialogFragment.dismiss()
         }
     }
 
