@@ -26,39 +26,32 @@ class LoginActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        /*
         //val button: Button = findViewById(R.id.button_login)
-
         // 1. Listener a partir definición de interfaz a partir de una clase
         //button.setOnClickListener(Listener())
 
         // 2. Listener a partir definición de una clase anónima
-        /*
         val listener: View.OnClickListener = object: View.OnClickListener {
             override fun onClick(view: View?) {
                 Toast.makeText(view?.context, "Hola clase anónima", Toast.LENGTH_SHORT).show()
             }
         }
         button.setOnClickListener(listener)
-         */
 
         // 3. Listener mediante funciones anónimas/lambdas
-        /*
         val listener: (View) -> Unit = {
             Toast.makeText(it.context, "Hola función lambda", Toast.LENGTH_SHORT).show()
         }
         button.setOnClickListener(listener)
-         */
 
         // 3. Listener mediante lambda abreviada
-        /*
         button.setOnClickListener {
             Toast.makeText(it?.context, "Hola lambda breve", Toast.LENGTH_SHORT).show()
         }
-         */
 
         //val inputUsername: EditText = findViewById(R.id.input_username)
 
-        /*
         button.setOnClickListener {
             Toast.makeText(
                 it?.context,
@@ -66,9 +59,7 @@ class LoginActivity : AppCompatActivity(),
                 Toast.LENGTH_SHORT
             ).show()
         }
-         */
 
-        /*
         button.setOnClickListener {
             val intent: Intent = Intent(this, TopicsActivity::class.java)
             startActivity(intent)
@@ -88,23 +79,10 @@ class LoginActivity : AppCompatActivity(),
         if (UserRepo.isLogged(this.applicationContext)) {
             showTopics()
         } else {
-            // tras hacer lo del shared preferences reemplazamos el código por
-            // la llamada a onGoToSignIn, en lugar de add es replace pero llama
-            // al mismo fragment
             onGoToSignIn()
-            /*
-            // creación del fragment
-            // punto 3, crear instancia del fragment
-            // ya no haría falta puesto que los creo al principio
-            //val signInFragment = SignInFragment()
-            // punto 4, añadir instancia al UI con ayuda de FragmentManager
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fragmentContainer, signInFragment)
-                .commit()
-             */
         }
     }
-
+/*
     override fun onStart() {
         super.onStart()
     }
@@ -124,18 +102,15 @@ class LoginActivity : AppCompatActivity(),
     override fun onDestroy() {
         super.onDestroy()
     }
+*/
 
-
-    // deja de usarse, antes estaba directamente con onclick en el xml
-    // porque es una actividad. Ahora estará en un fragment que no puede
-    // usar el onclick del xml y tiene que crearse en su propio código
-    //fun showTopics(view: View) {
-    // cuando estaba desde el xml si que era con view, sino casca
+    // el onclick directamente sobre el código xml únicamente se puede hacer
+    // si el método está implementado en una actividad, no en un fragmento.
+    // Cuando estaba desde el xml si tenia el parámetro view, sino casca
     // ahora como lo hacemos desde el onclick del fragment no hace falta el
     // parámetro view. De hecho antes tampoco se estaba usando aunque era
-    // obligatorio ponerlo
+    // obligatorio ponerlo. Aunque ese view hace referencia al propio button
     private fun showTopics() {
-        // el view hace referencia al propio button
         val intent: Intent = Intent(this, TopicsActivity::class.java)
         startActivity(intent)
         // se añadió en la última sesión cuando implementamos el menú logout
@@ -146,22 +121,14 @@ class LoginActivity : AppCompatActivity(),
     }
 
     override fun onGoToSignUp() {
-        // se está generando un nuevo fragmento por cada click
-        /*
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, SignUpFragment())
-            .commit()
-         */
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, signUpFragment)
             .commit()
     }
 
     override fun onSignIn(signInModel: SignInModel) {
-        // Antes de añadir el progress bar era esta la única llamada
-        //showTopics()
-
         enableLoading()
+
         UserRepo.signIn(
             this.applicationContext,
             signInModel,
@@ -171,7 +138,6 @@ class LoginActivity : AppCompatActivity(),
                 handleError(error)
             }
         )
-        //simulateLoading(signInModel)
     }
 
     private fun handleError(error: RequestError) {
@@ -181,7 +147,7 @@ class LoginActivity : AppCompatActivity(),
             // para que esté traducido
             Snackbar.make(container, error.messageResId, Snackbar.LENGTH_LONG).show()
         } else if (error.message != null) {
-            // este caso es cuando el texto nos lo envía el servidor
+            // este caso es cuando el texto nos lo envió el servidor
             Snackbar.make(container, error.message, Snackbar.LENGTH_LONG).show()
         } else {
             // último caso en el cual el servidor no nos devolvió nada, por ejemplo podría
@@ -191,12 +157,6 @@ class LoginActivity : AppCompatActivity(),
     }
 
     override fun onGoToSignIn() {
-        // se está generando un nuevo fragmento por cada click
-        /*
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, SignInFragment())
-            .commit()
-         */
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, signInFragment)
             .commit()
@@ -204,7 +164,6 @@ class LoginActivity : AppCompatActivity(),
 
     override fun onSignUp(signUpModel: SignUpModel) {
         enableLoading()
-        //simulateLoading()
 
         UserRepo.signUp(
             this.applicationContext,

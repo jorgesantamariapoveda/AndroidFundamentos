@@ -2,10 +2,15 @@ package org.jsantamariap.eh_ho.data
 
 import org.json.JSONObject
 
-// Cuando veamos en la parte avanzada retrofit
-// se usaran adaptadores para hacer el parseo de forma
-// automática. Es importante saber la forma manual porque hay casos que solamente
-// puede hacerse así.
+/*
+En la parte avanzada de Android se verá que para el parseo nos podemos ayudar de la librería
+Retrofit. No obstante, es importante saber la forma de hacerlo manualmente, tal y como aquí
+se ha hecho porque hay casos que no solamente se podrá hacer así.
+
+data class: nos ahorra mucho trabajo, se usa para que kotlin genere de forma automática toda
+los setters y getters por nosotros. Eso no impide que la dicha clase pueda tener sus propios
+métodos. Bye a bye a los POJO (acrónimo de Plain Old Java Object)
+*/
 
 data class SignInModel(
     val username: String,

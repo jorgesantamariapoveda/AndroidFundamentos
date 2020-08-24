@@ -5,8 +5,14 @@ import com.android.volley.toolbox.JsonObjectRequest
 import org.jsantamariap.eh_ho.BuildConfig
 import org.json.JSONObject
 
-// petición custom para añadir los headers
-// el parámetro username es para el createTopic
+/*
+Petición custom para realizar las peticiones.
+
+Detalle importante sobre los parámetros de la clase. Únicamente username es una propiedad
+de la clase, el resto son los parámetros necesarios para satisfacer el constructor de la clase
+JsonObjectRequest que dicha clase hereda
+ */
+
 class PostRequest(
     method: Int,
     url: String,
@@ -23,13 +29,18 @@ class PostRequest(
         headers["Accept"] = "application/json"
         headers["Api-Key"] = BuildConfig.DiscourseApiKey
 
-        // forma 1
         /*
+        A continuación se exponen dos formas similares de hacer lo mismo. En este caso concreto
+        como username es inmutable por ser val daría lo mismo, pero si no lo fuese la forma
+        correcta sería el uso del operador ?.let
+
         if (username != null) {
             headers["Api-username"] = username
         }
+        username?.let {
+            headers["Api-username"] = it
+        }
          */
-        // forma 2
         username?.let {
             headers["Api-username"] = it
         }

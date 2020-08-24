@@ -14,46 +14,25 @@ import java.lang.IllegalArgumentException
 
 class SignInFragment: Fragment() {
 
-    // cambiamos esto por una interfaz/protocolo
-    //var loginActivity: LoginActivity? = null
-    // esto es como el delegate de iOS
     private var signInInteractionListener: SignInInteractionListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         // este contexto es precisamente la instancia de la activity
-        // ¿ojo! esto es una mala práctica
-        //loginActivity = context as LoginActivity
+        // ¿ojo! esto es una mala práctica -> loginActivity = context as LoginActivity
+        // es por ello que se crea una interfaz SignInInteractionListener
         if (context is SignInInteractionListener)
             signInInteractionListener = context
         else
             throw IllegalArgumentException("Context doesn't implement ${SignInInteractionListener::class.java.canonicalName}")
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    // lo implementamos manualmente para sobreescribirlo
-    // punto 2, inflar vista del fragment
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return container?.inflate(R.layout.fragment_sign_in)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     override fun onDetach() {
@@ -68,11 +47,8 @@ class SignInFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // al igual que en una activity podemos acceder a los elementos de la
-        // vista
-
+        // al igual que en una activity podemos acceder a los elementos de la vista
         buttonLogin.setOnClickListener {
-            //loginActivity?.showTopics()
             val signInModel = SignInModel(
                 inputUsername.text.toString(),
                 inputPassword.text.toString()
@@ -81,7 +57,6 @@ class SignInFragment: Fragment() {
         }
 
         labelCreateAccount.setOnClickListener {
-            // intent
             signInInteractionListener?.onGoToSignUp()
         }
     }

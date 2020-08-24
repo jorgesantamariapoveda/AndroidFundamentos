@@ -2,10 +2,13 @@ package org.jsantamariap.eh_ho.data
 
 import com.android.volley.VolleyError
 
+/*
+Clase con tres propiedades creadas en el mismo momento de instanciarla. Es el azúcar sintáctico
+de kotlin
+ */
+
 class RequestError (
-    val volleyError: VolleyError? = null, // al final se puso anull por defecto porque en el
-    // caso del post pudiera ser que no hubiese error de Volly pero si que quiséramos sacar
-    // un error
+    val volleyError: VolleyError? = null,
     val message: String? = null,
     // identificador de un string de los recursos R
     val messageResId: Int? = null //R.string.····

@@ -4,15 +4,16 @@ import android.content.Context
 import com.android.volley.NetworkError
 import com.android.volley.Request
 import com.android.volley.ServerError
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
-import org.jsantamariap.eh_ho.BuildConfig
 import org.jsantamariap.eh_ho.R
 
 const val PREFERENCES_SESSION = "session"
 const val PREFERENCES_USERNAME = "username"
 
+/*
+object: clase anómina, viene a ser un singleton. Es decir una única instancia de una clase, teniendo su propio
+contexto estático.
+ */
 object UserRepo {
 
     // mediante el paso de dos lambdas como success y error
@@ -52,7 +53,7 @@ object UserRepo {
             ApiRoutes.signIn(signInModel.username),
             null,
             { response ->
-                // 5. notificar que la petición fu exitosa
+                // 5. notificar que la petición fue exitosa
                 success(signInModel)
                 // persistencia
                 saveSession(
@@ -89,12 +90,6 @@ object UserRepo {
         )
 
         // 2. encolar petición
-        // antes de haber hecho el "singleton" de la cola
-        /*
-        val requestQueue = Volley.newRequestQueue(context)
-        requestQueue.add(request)
-         */
-        // después del singleton
         ApiRequestQueue.getRequestQueue(context)
             .add(request)
 
@@ -113,13 +108,15 @@ object UserRepo {
             signUpModel.toJson(),
             null,
             { response ->
-                // a veces ocurre que auqneu el servidor devuelva un 200 puede haber algún
+                // a veces ocurre que aunque el servidor devuelva un 200 puede haber algún
                 // error (normalmente de formateo). Por lo que también es interesante consultar
-                // los campos que pueda devolver el body (se pueden ver x.ej desde Postman
+                // los campos que pueda devolver el body (se pueden ver x.ej desde Postman).
+                // Es decir, en este caso "success" es porque lo hemos visto en Postman
                 if (response?.getBoolean("success") == true) {
                     success(signUpModel)
                 }
                 else {
+                    // Ídem en este caso, "message" es porque lo hemos visto en Postman
                     error(RequestError(message = response?.getString("message")))
                 }
             },

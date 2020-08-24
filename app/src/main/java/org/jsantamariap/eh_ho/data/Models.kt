@@ -4,8 +4,6 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
-// un data class no hace falta los setters y getters
-// nos ahorra mucho trabajo
 data class Topic(
     val id: String = UUID.randomUUID().toString(),
     val title: String,
@@ -13,21 +11,20 @@ data class Topic(
     val posts: Int = 0,
     val views: Int = 0
 ) {
-    // al colocar 1000L estamos diciendo que sea un Long
-    // para ampliar el rango y que no halla un desbordamiento
+    // al colocar 1000L estamos diciendo que sea un Long para ampliar el rango y que no halla un desbordamiento
     val MINUTE_MILLIS = 1000L * 60
     val HOUR_MILLIS = MINUTE_MILLIS * 60
     val DAY_MILLIS = HOUR_MILLIS * 24
     val MONTH_MILLIS = DAY_MILLIS * 30
     val YEAR_MILLIS = MONTH_MILLIS * 12
 
+    // No hay ningún problema que dentro de un data class se declare otro data class
     data class TimeOffSet(
         val amount: Int,
         val unit: Int
     )
 
-    // se le pueden añadir funcionalidades extras que no
-    // tengan que ver con los setters y getters
+    // parámetro con valor por defecto
     fun getTimeOffSet(dateToCompare: Date = Date()): TimeOffSet {
         val currentDate = dateToCompare.time
         val difference = currentDate - this.date.time
@@ -65,6 +62,10 @@ data class Topic(
         return TimeOffSet(0, Calendar.MINUTE)
     }
 
+    /*
+    El uso de companion object es para declarar un ámbito donde todas las funciones
+    tienen el alcance de estáticas
+     */
     companion object {
 
         fun parseTopicList(response: JSONObject): List<Topic> {
@@ -73,8 +74,10 @@ data class Topic(
 
             val topics = mutableListOf<Topic>()
 
-            // lo ideal sería hacer un map pero resulta que no lo está implementado
-            // en los jsonObject, por lo que hay que hacerlo con un for típico
+            /*
+            lo ideal sería hacer un map, pero resulta que no lo está implementado
+            en los jsonObject, por lo que hay que hacerlo con un for típico
+             */
             for (i in 0 until objectLis.length()) {
                 val parsedTopic = parseTopic(objectLis.getJSONObject(i))
                 topics.add(parsedTopic)
@@ -84,7 +87,7 @@ data class Topic(
         }
 
         fun parseTopic(jsonObject: JSONObject): Topic {
-            //java no puede tratar el tema de las zonas horarios Z
+            // java no puede tratar el tema de las zonas horarios Z
             // ej 2020-08-13T16:27:00.945Z, entonces vamos a eliminarla
             val date = jsonObject.getString("created_at")
                 .replace("Z", "+0000")

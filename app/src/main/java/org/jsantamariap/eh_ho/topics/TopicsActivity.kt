@@ -22,36 +22,6 @@ class TopicsActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_topics)
 
-        // es más limpio el uso de debugger
-        // Log.d(TopicsActivity::class.simpleName, TopicsRepo.topics.toString())
-
-        // modo antiguo findViewById, incómodo x.ej un formulario
-        // muchas llamadas
-        /*
-        val list: RecyclerView = findViewById(R.id.list_topics)
-        list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-         */
-
-        // comentado tras realizar el refactor para que esté dentro
-        // de un fragment
-        /*
-        listTopics.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
-        // creación adapter y asignacion a listTopics
-        val adapter = TopicsAdapter {
-            Log.d(
-                TopicsActivity::class.java.canonicalName,
-                it.title
-            )
-
-            // Pasando datos entre actividades
-            goToPosts(it)
-        }
-        adapter.setTopics(TopicsRepo.topics)
-
-        listTopics.adapter = adapter
-         */
-
         if (isFirsTimeCreated(savedInstanceState))
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragmentContainer, TopicsFragment())
@@ -62,9 +32,7 @@ class TopicsActivity : AppCompatActivity(),
         val intent = Intent(this, PostsActivity::class.java)
         // pasar datos entre actividades
         // lástima que no se puedan pasar las referencias u objetos sino
-        // que son datos primitivos
-        // primera forma, hardcoreado, nada recomendado
-        //intent.putExtra("TOPIC_ID", topic.id)
+        // que solamente datos primitivos
         intent.putExtra(EXTRA_TOPIC_ID, topic.id)
         startActivity(intent)
     }

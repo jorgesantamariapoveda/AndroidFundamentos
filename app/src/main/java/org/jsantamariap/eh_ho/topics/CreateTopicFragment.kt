@@ -19,6 +19,7 @@ const val TAG_LOADING_DIALOG = "tag_loadign_dialog"
 class CreateTopicFragment : Fragment() {
 
     var interactionListener: CreateTopicInteractionListener? = null
+
     private val loadingDialogFragment: LoadingDialogFragment by lazy {
         val message = getString(R.string.label_creating_topic)
         LoadingDialogFragment.newInstance(message)
@@ -51,8 +52,9 @@ class CreateTopicFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        // primero se infla y después se llama al super.onCreate...
+        // ¡OJO! primero se infla y después se llama al super.onCreate...
         inflater.inflate(R.menu.menu_create_topic, menu)
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -64,6 +66,7 @@ class CreateTopicFragment : Fragment() {
         when (item.itemId) {
             R.id.action_send -> createTopic()
         }
+
         return super.onOptionsItemSelected(item)
     }
 
@@ -75,24 +78,6 @@ class CreateTopicFragment : Fragment() {
 
     private fun createTopic() {
         if (isFormValid()) {
-
-            // forma 1, antes de implementar api
-            /*
-            TopicsRepo.addTopic(
-                inputTitle.text.toString()
-            )
-
-            // esto es un tanto peligroso, pues puede que el fragment no esté
-            // en el flujo. La solución es la de siempre, delegar en la actividad
-            // que contiene ese fragment para que se encargue ella mediante
-            // la creación de un interface
-
-            // fragmentManager?.popBackStack()
-
-            //interactionListener?.onTopicCreated()
-             */
-
-            // forma 2
             postTopic()
         } else {
             showError()
@@ -103,6 +88,7 @@ class CreateTopicFragment : Fragment() {
         enabledLoadingDialog()
 
         val model = CreateTopicModel(inputTitle.text.toString(), inputContent.text.toString())
+
         this.context?.let {
             TopicsRepo.addTopic(
                 it.applicationContext,
@@ -121,7 +107,6 @@ class CreateTopicFragment : Fragment() {
 
     private fun enabledLoadingDialog(enabled: Boolean = true) {
         if (enabled) {
-            // el manejador se hará cargo del diálogo
             fragmentManager?.let {
                 loadingDialogFragment.show(it, TAG_LOADING_DIALOG)
             }
@@ -145,7 +130,6 @@ class CreateTopicFragment : Fragment() {
 
     private fun showError() {
         if (inputTitle.text.isEmpty()) {
-            //inputTitle.error = "Error, texto hardcodeado, mala idea"
             inputTitle.error = context?.getString(R.string.error_empty)
         }
         if (inputContent.text.isEmpty()) {
@@ -153,7 +137,6 @@ class CreateTopicFragment : Fragment() {
         }
     }
 
-    // realizado con un refactor, Ctrl+T
     private fun isFormValid() = inputTitle.text.isNotEmpty() &&
             inputContent.text.isNotEmpty()
 

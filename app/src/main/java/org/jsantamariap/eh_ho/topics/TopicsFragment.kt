@@ -22,13 +22,7 @@ class TopicsFragment : Fragment() {
     // que sea inmutable
     private val topicsAdapter: TopicsAdapter by lazy {
         val adapter = TopicsAdapter {
-            Log.d(
-                TopicsActivity::class.java.canonicalName,
-                it.title
-            )
-
             // Pasando datos entre actividades
-            //goToPosts(it)
             this.topicsInteractionListener?.onShowPosts(it)
         }
         adapter
@@ -47,7 +41,23 @@ class TopicsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // provoca que se creen un par de métodos en el ciclo de vida
+        // para añadir menus: onCreateOptionsMenu y onOptionsItemSelected
         setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_topics, menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_logout -> this.topicsInteractionListener?.onLogout()
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateView(
@@ -55,32 +65,15 @@ class TopicsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return container?.inflate(R.layout.fragment_topics)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // creación adapter y asignacion a listTopics
-        /*
-        val adapter = TopicsAdapter {
-            Log.d(
-                TopicsActivity::class.java.canonicalName,
-                it.title
-            )
-
-            // Pasando datos entre actividades
-            //goToPosts(it)
-            this.topicsInteractionListener?.onShowPosts(it)
-        }
-         */
-
         // comentado, antes de hacer petición al servidor. Una vez lo tenemos, el momento
         // apropiado para recuperarlos en cuando ya están todos los elementos de la pantalla
         // cargados, por lo tanto se hará en el onResume
-        //adapter.setTopics(TopicsRepo.topics)
 
         listTopics.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         // esto añade una linea tras cada topic
@@ -104,12 +97,6 @@ class TopicsFragment : Fragment() {
             TopicsRepo.getTopics(
                 it.applicationContext,
                 {
-                    // esto quedaba un poco feo, es decir tener que hacer el casting
-                    // así que gracias a AndroidStudio vamos a sacarla como una propiedad Ctrl+T
-                    // para que pueda ser manipulada por el fragmento entero
-                    // Además será de tipo lazy
-                    // Con lo que la siguiente línea la puede comentar
-                    //val adapter = listTopics.adapter as TopicsAdapter
                     topicsAdapter.setTopics(it)
                 },
                 {
@@ -117,18 +104,6 @@ class TopicsFragment : Fragment() {
                 }
             )
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_topics, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_logout -> this.topicsInteractionListener?.onLogout()
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onDetach() {
