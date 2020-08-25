@@ -29,18 +29,6 @@ class PostRequest(
         headers["Accept"] = "application/json"
         headers["Api-Key"] = BuildConfig.DiscourseApiKey
 
-        /*
-        A continuación se exponen dos formas similares de hacer lo mismo. En este caso concreto
-        como username es inmutable por ser val daría lo mismo, pero si no lo fuese la forma
-        correcta sería el uso del operador ?.let
-
-        if (username != null) {
-            headers["Api-username"] = username
-        }
-        username?.let {
-            headers["Api-username"] = it
-        }
-         */
         username?.let {
             headers["Api-username"] = it
         }

@@ -16,6 +16,8 @@ import java.lang.IllegalArgumentException
 
 class TopicsFragment : Fragment() {
 
+    // MARK: - Properties
+
     private var topicsInteractionListener: TopicsInteractionListener? = null
 
     // además de ser lazy, también es una constante con lo que nos aseguramos
@@ -27,6 +29,8 @@ class TopicsFragment : Fragment() {
         }
         adapter
     }
+
+    // MARK: - Life cycle
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -92,6 +96,14 @@ class TopicsFragment : Fragment() {
         loadTopics()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+
+        topicsInteractionListener = null
+    }
+
+    // MARK: - Private functions
+
     private fun loadTopics() {
         context?.let {
             TopicsRepo.getTopics(
@@ -106,11 +118,7 @@ class TopicsFragment : Fragment() {
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-
-        topicsInteractionListener = null
-    }
+    // MARK: - Interface TopicsInteractionListener
 
     interface TopicsInteractionListener {
         fun onCreateTopic()

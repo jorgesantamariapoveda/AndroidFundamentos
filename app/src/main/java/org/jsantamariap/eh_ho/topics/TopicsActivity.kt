@@ -18,6 +18,8 @@ class TopicsActivity : AppCompatActivity(),
     TopicsFragment.TopicsInteractionListener,
     CreateTopicFragment.CreateTopicInteractionListener {
 
+    // MARK: - Life cycle
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_topics)
@@ -28,14 +30,7 @@ class TopicsActivity : AppCompatActivity(),
                 .commit()
     }
 
-    private fun goToPosts(topic: Topic) {
-        val intent = Intent(this, PostsActivity::class.java)
-        // pasar datos entre actividades
-        // lástima que no se puedan pasar las referencias u objetos sino
-        // que solamente datos primitivos
-        intent.putExtra(EXTRA_TOPIC_ID, topic.id)
-        startActivity(intent)
-    }
+    // MARK: - Interface TopicsInteractionListener
 
     override fun onCreateTopic() {
         // crear pila con addToBackStack
@@ -59,9 +54,22 @@ class TopicsActivity : AppCompatActivity(),
         // de la pila de actividades
     }
 
+    // MARK: - Interface CreateTopicInteractionListener
+
     override fun onTopicCreated() {
         // dentro de la actividad tengo más control de los flujos
         // por ello se hace aquí y no dentro del fragment
         supportFragmentManager.popBackStack()
+    }
+
+    // MARK: - Private functions
+
+    private fun goToPosts(topic: Topic) {
+        val intent = Intent(this, PostsActivity::class.java)
+        // pasar datos entre actividades
+        // lástima que no se puedan pasar las referencias u objetos sino
+        // que solamente datos primitivos
+        intent.putExtra(EXTRA_TOPIC_ID, topic.id)
+        startActivity(intent)
     }
 }

@@ -6,15 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.fragment_create_topic.*
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 import org.jsantamariap.eh_ho.R
 import org.jsantamariap.eh_ho.data.SignInModel
 import org.jsantamariap.eh_ho.inflate
 import java.lang.IllegalArgumentException
 
-class SignInFragment: Fragment() {
+class SignInFragment : Fragment() {
+
+    // MARK: - Properties
 
     private var signInInteractionListener: SignInInteractionListener? = null
+
+    // MARK: - Life cycle
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -49,11 +54,15 @@ class SignInFragment: Fragment() {
 
         // al igual que en una activity podemos acceder a los elementos de la vista
         buttonLogin.setOnClickListener {
-            val signInModel = SignInModel(
-                inputUsername.text.toString(),
-                inputPassword.text.toString()
-            )
-            signInInteractionListener?.onSignIn(signInModel)
+            if (isFormValid()) {
+                val signInModel = SignInModel(
+                    inputUsername.text.toString(),
+                    inputPassword.text.toString()
+                )
+                signInInteractionListener?.onSignIn(signInModel)
+            } else {
+                showError()
+            }
         }
 
         labelCreateAccount.setOnClickListener {
@@ -61,10 +70,26 @@ class SignInFragment: Fragment() {
         }
     }
 
+    // MARK: - Private functions
+
+    private fun isFormValid() =
+        inputUsername.text.isNotEmpty()
+                && inputPassword.text.isNotEmpty()
+
+    private fun showError() {
+        if (inputUsername.text.isEmpty()) {
+            inputUsername.error = context?.getString(R.string.error_empty)
+        }
+        if (inputPassword.text.isEmpty()) {
+            inputPassword.error = context?.getString(R.string.error_empty)
+        }
+    }
+
+    // MARK: - Interface SignInInteractionListener
+
     // Definimos la interface que implementará la activity
     interface SignInInteractionListener {
         fun onGoToSignUp()
         fun onSignIn(signInModel: SignInModel)
     }
-
 }

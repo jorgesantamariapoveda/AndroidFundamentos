@@ -12,6 +12,8 @@ const val ARG_MESSAGE = "message"
 
 class LoadingDialogFragment: DialogFragment() {
 
+    // MARK: - Life cycle
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

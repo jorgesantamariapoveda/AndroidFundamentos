@@ -25,35 +25,12 @@ object UserRepo {
         success: (SignInModel) -> Unit,
         error: (RequestError) -> Unit
     ) {
-        // 1. crear request
-        // primera forma, antes de haber creado el ApiRouter
-        /*
-        val request = JsonObjectRequest(
-            Request.Method.GET,
-            "https://mdiscourse.keepcoding.io/users/${signInModel.username}.json",
-            null,
-            { response ->
-                // 5. notificar que la petición fu exitosa
-                success(signInModel)
-                // persistencia
-                saveSession(
-                    context,
-                    signInModel.username
-                )
-            },
-            { err ->
-                err.printStackTrace()
-                error(err)
-            }
-        )
-        */
-        // segunda forma, después de haber creado el ApiRouter
         val request = JsonObjectRequest(
             Request.Method.GET,
             ApiRoutes.signIn(signInModel.username),
             null,
             { response ->
-                // 5. notificar que la petición fue exitosa
+                // notificar que la petición fue exitosa
                 success(signInModel)
                 // persistencia
                 saveSession(
@@ -64,19 +41,7 @@ object UserRepo {
             { err ->
                 err.printStackTrace()
 
-                // para que quede más limpio asignamos var al if (ver más abajo)
-                /*
-                if (err is ServerError && err.networkResponse.statusCode == 404) {
-                    val errorObject = RequestError(err, messageResId = R.string.error_not_registered)
-                    error(errorObject)
-                } else if (err is NetworkError) {
-                    val errorObject = RequestError(err, messageResId = R.string.error_not_internet)
-                    error(errorObject)
-                } else {
-                    val errorObject = RequestError(err)
-                    error(err)
-                }
-                 */
+                // para que quede más limpio asignamos var al if
                 var errorObject = if (err is ServerError && err.networkResponse.statusCode == 404) {
                     RequestError(err, messageResId = R.string.error_not_registered)
                 } else if (err is NetworkError) {
@@ -138,14 +103,6 @@ object UserRepo {
             .add(request)
     }
 
-    private fun saveSession(context: Context, username: String) {
-        val preferences = context.getSharedPreferences(PREFERENCES_SESSION, Context.MODE_PRIVATE)
-
-        preferences.edit()
-            .putString(PREFERENCES_USERNAME, username)
-            .apply()
-    }
-
     fun logout(context: Context) {
         val preferences = context.getSharedPreferences(PREFERENCES_SESSION, Context.MODE_PRIVATE)
 
@@ -165,5 +122,13 @@ object UserRepo {
         val preferences = context.getSharedPreferences(PREFERENCES_SESSION, Context.MODE_PRIVATE)
 
         return preferences.getString(PREFERENCES_USERNAME, null)
+    }
+
+    private fun saveSession(context: Context, username: String) {
+        val preferences = context.getSharedPreferences(PREFERENCES_SESSION, Context.MODE_PRIVATE)
+
+        preferences.edit()
+            .putString(PREFERENCES_USERNAME, username)
+            .apply()
     }
 }

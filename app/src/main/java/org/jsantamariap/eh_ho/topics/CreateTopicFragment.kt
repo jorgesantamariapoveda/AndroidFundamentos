@@ -18,12 +18,16 @@ const val TAG_LOADING_DIALOG = "tag_loadign_dialog"
 
 class CreateTopicFragment : Fragment() {
 
+    // MARK: - Properties
+
     var interactionListener: CreateTopicInteractionListener? = null
 
     private val loadingDialogFragment: LoadingDialogFragment by lazy {
         val message = getString(R.string.label_creating_topic)
         LoadingDialogFragment.newInstance(message)
     }
+
+    // MARK: - Life cycle
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -75,6 +79,8 @@ class CreateTopicFragment : Fragment() {
 
         interactionListener = null
     }
+
+    // MARK: - Private functions
 
     private fun createTopic() {
         if (isFormValid()) {
@@ -128,6 +134,9 @@ class CreateTopicFragment : Fragment() {
         Snackbar.make(container, message, Snackbar.LENGTH_LONG).show()
     }
 
+    private fun isFormValid() = inputTitle.text.isNotEmpty() &&
+            inputContent.text.isNotEmpty()
+
     private fun showError() {
         if (inputTitle.text.isEmpty()) {
             inputTitle.error = context?.getString(R.string.error_empty)
@@ -137,8 +146,8 @@ class CreateTopicFragment : Fragment() {
         }
     }
 
-    private fun isFormValid() = inputTitle.text.isNotEmpty() &&
-            inputContent.text.isNotEmpty()
+
+    // MARK: - Interface CreateTopicInteractionListener
 
     interface CreateTopicInteractionListener {
         fun onTopicCreated()

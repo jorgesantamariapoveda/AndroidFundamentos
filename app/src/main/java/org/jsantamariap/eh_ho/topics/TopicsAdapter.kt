@@ -13,6 +13,8 @@ import java.util.*
 class TopicsAdapter(val topicClickListener: ((Topic) -> Unit)? = null) :
     RecyclerView.Adapter<TopicsAdapter.TopicHolder>() {
 
+    // MARK: - Properties
+
     private val topics = mutableListOf<Topic>()
 
     // View representa la vista sobre la que se le hace el click
@@ -62,6 +64,8 @@ class TopicsAdapter(val topicClickListener: ((Topic) -> Unit)? = null) :
         holder.itemView.setOnClickListener(listener)
     }
 
+    // MARK: - Public functions
+
     fun setTopics(topics: List<Topic>) {
         this.topics.clear()
         this.topics.addAll(topics)
@@ -72,6 +76,8 @@ class TopicsAdapter(val topicClickListener: ((Topic) -> Unit)? = null) :
         // getiItemCount, onCreateViewHolder y onBindViewHolder
         notifyDataSetChanged()
     }
+
+    // MARK: - inner class
 
     // los objetos TopicHolder viven dentro de TopicsAdapter y comparten el context
     inner class TopicHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
