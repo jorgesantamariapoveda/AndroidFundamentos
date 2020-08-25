@@ -89,7 +89,7 @@ class SignInFragment : Fragment() {
 
     // Definimos la interface que implementará la activity
     interface SignInInteractionListener {
-        fun onGoToSignUp()
         fun onSignIn(signInModel: SignInModel)
+        fun onGoToSignUp()
     }
 }

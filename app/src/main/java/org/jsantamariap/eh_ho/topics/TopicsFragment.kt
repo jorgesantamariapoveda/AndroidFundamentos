@@ -36,10 +36,9 @@ class TopicsFragment : Fragment() {
         super.onAttach(context)
 
         if (context is TopicsInteractionListener)
-            topicsInteractionListener = context
+            this.topicsInteractionListener = context
         else
             throw IllegalArgumentException("Context doesn't implement ${TopicsInteractionListener::class.java.canonicalName}")
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,7 +98,7 @@ class TopicsFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
 
-        topicsInteractionListener = null
+        this.topicsInteractionListener = null
     }
 
     // MARK: - Private functions
@@ -110,6 +109,7 @@ class TopicsFragment : Fragment() {
                 it.applicationContext,
                 {
                     topicsAdapter.setTopics(it)
+                    this.topicsInteractionListener?.onLoadTopics()
                 },
                 {
                     // TODO: manejo de errores (forma parte de la práctica)
@@ -124,5 +124,6 @@ class TopicsFragment : Fragment() {
         fun onCreateTopic()
         fun onShowPosts(topic: Topic)
         fun onLogout()
+        fun onLoadTopics()
     }
 }

@@ -93,7 +93,7 @@ class SignUpFragment: Fragment() {
     // MARK: - Interface SignUpInteractionListener
 
     interface SignUpInteractionListener {
-        fun onGoToSignIn()
         fun onSignUp(signUpModel: SignUpModel)
+        fun onGoToSignIn()
     }
 }

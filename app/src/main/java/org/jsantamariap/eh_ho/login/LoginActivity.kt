@@ -21,15 +21,14 @@ class LoginActivity : AppCompatActivity(),
 
     // MARK: - Properties
 
-    private val signUpFragment: SignUpFragment = SignUpFragment()
     private val signInFragment: SignInFragment = SignInFragment()
+    private val signUpFragment: SignUpFragment = SignUpFragment()
 
     // MARK: - Life cycle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
 
         // el if es para evitar el repintado
         // modo 1
@@ -68,12 +67,7 @@ class LoginActivity : AppCompatActivity(),
 
     // MARK: - Interface SignInInteractionListener
 
-    override fun onGoToSignUp() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, signUpFragment)
-            .commit()
-    }
-
+    // LOGIN
     override fun onSignIn(signInModel: SignInModel) {
         enableLoading()
 
@@ -88,14 +82,16 @@ class LoginActivity : AppCompatActivity(),
         )
     }
 
-    // MARK: - Interface SignUpInteractionListener
-
-    override fun onGoToSignIn() {
+    // CREATE NEW ACCOUNT
+    override fun onGoToSignUp() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, signInFragment)
+            .replace(R.id.fragmentContainer, signUpFragment)
             .commit()
     }
 
+    // MARK: - Interface SignUpInteractionListener
+
+    // SIGN UP
     override fun onSignUp(signUpModel: SignUpModel) {
         enableLoading()
 
@@ -111,6 +107,13 @@ class LoginActivity : AppCompatActivity(),
                 enableLoading(false)
                 handleError(it)
             })
+    }
+
+    // SIGN IN
+    override fun onGoToSignIn() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, signInFragment)
+            .commit()
     }
 
     // MARK: - Private functions

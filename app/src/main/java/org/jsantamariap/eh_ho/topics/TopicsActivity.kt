@@ -2,7 +2,9 @@ package org.jsantamariap.eh_ho.topics
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_login.*
 // con el siguiente import se evita el uso de findViewById
 import org.jsantamariap.eh_ho.*
 import org.jsantamariap.eh_ho.data.Topic
@@ -30,6 +32,12 @@ class TopicsActivity : AppCompatActivity(),
                 .commit()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        enableLoading()
+    }
+
     // MARK: - Interface TopicsInteractionListener
 
     override fun onCreateTopic() {
@@ -54,6 +62,10 @@ class TopicsActivity : AppCompatActivity(),
         // de la pila de actividades
     }
 
+    override fun onLoadTopics() {
+        enableLoading(false)
+    }
+
     // MARK: - Interface CreateTopicInteractionListener
 
     override fun onTopicCreated() {
@@ -63,6 +75,16 @@ class TopicsActivity : AppCompatActivity(),
     }
 
     // MARK: - Private functions
+
+    private fun enableLoading(enable: Boolean = true) {
+        if (enable) {
+            fragmentContainer.visibility = View.INVISIBLE
+            viewLoading.visibility = View.VISIBLE
+        } else {
+            fragmentContainer.visibility = View.VISIBLE
+            viewLoading.visibility = View.INVISIBLE
+        }
+    }
 
     private fun goToPosts(topic: Topic) {
         val intent = Intent(this, PostsActivity::class.java)
