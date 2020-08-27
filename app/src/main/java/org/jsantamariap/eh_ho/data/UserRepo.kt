@@ -29,7 +29,7 @@ object UserRepo {
             Request.Method.GET,
             ApiRoutes.signIn(signInModel.username),
             null,
-            { response ->
+            {
                 // notificar que la petición fue exitosa
                 success(signInModel)
                 // persistencia
@@ -79,8 +79,7 @@ object UserRepo {
                 // Es decir, en este caso "success" es porque lo hemos visto en Postman
                 if (response?.getBoolean("success") == true) {
                     success(signUpModel)
-                }
-                else {
+                } else {
                     // Ídem en este caso, "message" es porque lo hemos visto en Postman
                     error(RequestError(message = response?.getString("message")))
                 }

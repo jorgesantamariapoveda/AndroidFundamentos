@@ -21,7 +21,7 @@ class TopicsAdapter(val topicClickListener: ((Topic) -> Unit)? = null) :
     private val listener: ((View) -> Unit) = {
         val topic: Topic = it.tag as Topic
 
-        // me quito responsabilidad, se ejecut aun código que se pasa
+        // me quito responsabilidad, se ejecuta un código que se pasa
         // desde fuera
         topicClickListener?.invoke(topic)
 

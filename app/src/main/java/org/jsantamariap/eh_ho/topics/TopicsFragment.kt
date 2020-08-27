@@ -74,10 +74,6 @@ class TopicsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // comentado, antes de hacer petición al servidor. Una vez lo tenemos, el momento
-        // apropiado para recuperarlos en cuando ya están todos los elementos de la pantalla
-        // cargados, por lo tanto se hará en el onResume
-
         listTopics.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         // esto añade una linea tras cada topic
         listTopics.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
@@ -87,11 +83,17 @@ class TopicsFragment : Fragment() {
         buttonCreateTopic.setOnClickListener {
             this.topicsInteractionListener?.onCreateTopic()
         }
+
+        buttonRetryTopics.setOnClickListener {
+            loadTopics()
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
+        // Una vez tenemos los topics el momento apropiado para mostralos es cuando
+        // ya están todos los elementos de la pantalla cargados, por lo tanto se hará en el onResume
         loadTopics()
     }
 
@@ -104,15 +106,22 @@ class TopicsFragment : Fragment() {
     // MARK: - Private functions
 
     private fun loadTopics() {
+
         context?.let {
             TopicsRepo.getTopics(
                 it.applicationContext,
                 {
+                    containerListTopics.visibility = View.VISIBLE
+                    containerRetryTopics.visibility = View.INVISIBLE
+
                     topicsAdapter.setTopics(it)
                     this.topicsInteractionListener?.onLoadTopics()
                 },
                 {
-                    // TODO: manejo de errores (forma parte de la práctica)
+                    containerListTopics.visibility = View.INVISIBLE
+                    containerRetryTopics.visibility = View.VISIBLE
+
+                    this.topicsInteractionListener?.onLoadTopics()
                 }
             )
         }

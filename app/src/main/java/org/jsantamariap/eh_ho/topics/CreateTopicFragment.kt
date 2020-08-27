@@ -47,14 +47,6 @@ class CreateTopicFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return container?.inflate(R.layout.fragment_create_topic)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         // ¡OJO! primero se infla y después se llama al super.onCreate...
         inflater.inflate(R.menu.menu_create_topic, menu)
@@ -72,6 +64,14 @@ class CreateTopicFragment : Fragment() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return container?.inflate(R.layout.fragment_create_topic)
     }
 
     override fun onDetach() {
