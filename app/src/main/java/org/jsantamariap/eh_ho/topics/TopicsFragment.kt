@@ -106,14 +106,13 @@ class TopicsFragment : Fragment() {
     // MARK: - Private functions
 
     private fun loadTopics() {
+        containerListTopics.visibility = View.VISIBLE
+        containerRetryTopics.visibility = View.INVISIBLE
 
         context?.let {
             TopicsRepo.getTopics(
                 it.applicationContext,
                 {
-                    containerListTopics.visibility = View.VISIBLE
-                    containerRetryTopics.visibility = View.INVISIBLE
-
                     topicsAdapter.setTopics(it)
                     this.topicsInteractionListener?.onLoadTopics()
                 },
