@@ -11,6 +11,7 @@ import org.jsantamariap.eh_ho.R
 import org.jsantamariap.eh_ho.data.CreateTopicModel
 import org.jsantamariap.eh_ho.data.RequestError
 import org.jsantamariap.eh_ho.data.TopicsRepo
+import org.jsantamariap.eh_ho.data.UserRepo
 import org.jsantamariap.eh_ho.inflate
 import java.lang.IllegalArgumentException
 
@@ -21,6 +22,7 @@ class CreateTopicFragment : Fragment() {
     // MARK: - Properties
 
     var interactionListener: CreateTopicInteractionListener? = null
+    var username: String? = null
 
     private val loadingDialogFragment: LoadingDialogFragment by lazy {
         val message = getString(R.string.label_creating_topic)
@@ -34,6 +36,7 @@ class CreateTopicFragment : Fragment() {
 
         if (context is CreateTopicInteractionListener) {
             interactionListener = context
+            username = UserRepo.getUsername(context)
         } else {
             throw IllegalArgumentException("Context doesn't implement ${CreateTopicInteractionListener::class.java.canonicalName}")
         }
@@ -78,6 +81,14 @@ class CreateTopicFragment : Fragment() {
         super.onDetach()
 
         interactionListener = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        username?.let {
+            inputAuthor.text = it
+        }
     }
 
     // MARK: - Private functions
