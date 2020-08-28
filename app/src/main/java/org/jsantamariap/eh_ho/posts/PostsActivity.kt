@@ -24,6 +24,8 @@ class PostsActivity : AppCompatActivity() {
         val topicId: String = intent.getStringExtra(EXTRA_TOPIC_ID) ?: ""
         val topic: Topic? = TopicsRepo.getTopic(topicId)
 
+        TopicsRepo.getPosts(topicId, this.applicationContext)
+
         topic?.let {
             labelTitle.text = it.title
         }

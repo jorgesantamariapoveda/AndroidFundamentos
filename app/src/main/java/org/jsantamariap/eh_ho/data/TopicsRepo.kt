@@ -98,4 +98,29 @@ object TopicsRepo {
             .getRequestQueue(context)
             .add(request)
     }
+
+    fun getPosts(
+        id: String,
+        context: Context
+    ) {
+        val request = JsonObjectRequest(
+            Request.Method.GET,
+            ApiRoutes.getPosts(id),
+            null,
+            {
+                var list = Post.parseTopicList(it)
+
+                list.size
+
+            },
+            {
+                it.printStackTrace()
+
+            }
+        )
+
+        ApiRequestQueue
+            .getRequestQueue(context)
+            .add(request)
+    }
 }

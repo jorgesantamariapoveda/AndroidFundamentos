@@ -4,6 +4,8 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
+// MARK: - Topics
+
 data class Topic(
     val id: String = UUID.randomUUID().toString(),
     val title: String,
@@ -105,5 +107,53 @@ data class Topic(
                 views = jsonObject.getInt("views")
             )
         }
+    }
+}
+
+// MARK: - Posts
+
+data class Post(
+    val author: String,
+    val content: String,
+    val date: Date = Date()
+) {
+    companion object {
+
+        fun parseTopicList(response: JSONObject): List<Post> {
+            val objectLis = response.getJSONObject("post_stream")
+                .getJSONArray("posts")
+
+            val posts = mutableListOf<Post>()
+
+            /*
+            lo ideal sería hacer un map, pero resulta que no lo está implementado
+            en los jsonObject, por lo que hay que hacerlo con un for típico
+             */
+            for (i in 0 until objectLis.length()) {
+                val parsedPost = parsePost(objectLis.getJSONObject(i))
+                posts.add(parsedPost)
+            }
+
+            return posts
+        }
+
+        fun parsePost(jsonObject: JSONObject): Post {
+            // java no puede tratar el tema de las zonas horarios Z
+            // ej 2020-08-13T16:27:00.945Z, entonces vamos a eliminarla
+            val date = jsonObject.getString("created_at")
+                .replace("Z", "+0000")
+
+            // SSSZ -> zona horaria
+            // El locale es la zona local a la cual se va a convertir
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
+            val dateFormatted = dateFormat.parse(date) ?: Date()
+
+            return Post(
+                author = jsonObject.getString("username").toString(),
+                content = jsonObject.getString("cooked"),
+                date = dateFormatted
+            )
+        }
+
     }
 }
