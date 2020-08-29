@@ -4,8 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_login.*
-// con el siguiente import se evita el uso de findViewById
+import kotlinx.android.synthetic.main.activity_posts.*
 import org.jsantamariap.eh_ho.*
 import org.jsantamariap.eh_ho.data.Topic
 import org.jsantamariap.eh_ho.data.UserRepo
@@ -38,7 +37,7 @@ class TopicsActivity : AppCompatActivity(),
         enableLoading()
     }
 
-    // MARK: - Interface TopicsInteractionListener
+    // MARK: - Interface TopicsFragment.TopicsInteractionListener
 
     override fun onCreateTopic() {
         // crear pila con addToBackStack
@@ -52,21 +51,30 @@ class TopicsActivity : AppCompatActivity(),
         goToPosts(topic)
     }
 
+    private fun goToPosts(topic: Topic) {
+        val intent = Intent(this, PostsActivity::class.java)
+        // pasar datos entre actividades
+        // lástima que no se puedan pasar las referencias u objetos sino
+        // que solamente datos primitivos
+        intent.putExtra(EXTRA_TOPIC_ID, topic.id)
+        startActivity(intent)
+    }
+
     override fun onLogout() {
         // 1.- borrar datos del usuario del shared preferences
         UserRepo.logout(this.applicationContext)
         // 2.- volver a la pantalla de login activity_login
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
-        finish() // super importante, con esto TopicsActivity se destruye
-        // de la pila de actividades
+        // importante, con esto TopicsActivity se destruye de la pila de actividades
+        finish()
     }
 
     override fun onLoadTopics() {
         enableLoading(false)
     }
 
-    // MARK: - Interface CreateTopicInteractionListener
+    // MARK: - Interface CreateTopicFragment.CreateTopicInteractionListener
 
     override fun onTopicCreated() {
         // dentro de la actividad tengo más control de los flujos
@@ -84,14 +92,5 @@ class TopicsActivity : AppCompatActivity(),
             fragmentContainer.visibility = View.VISIBLE
             viewLoading.visibility = View.INVISIBLE
         }
-    }
-
-    private fun goToPosts(topic: Topic) {
-        val intent = Intent(this, PostsActivity::class.java)
-        // pasar datos entre actividades
-        // lástima que no se puedan pasar las referencias u objetos sino
-        // que solamente datos primitivos
-        intent.putExtra(EXTRA_TOPIC_ID, topic.id)
-        startActivity(intent)
     }
 }

@@ -119,7 +119,7 @@ data class Post(
 ) {
     companion object {
 
-        fun parseTopicList(response: JSONObject): List<Post> {
+        fun parsePostList(response: JSONObject): List<Post> {
             val objectLis = response.getJSONObject("post_stream")
                 .getJSONArray("posts")
 
@@ -148,9 +148,13 @@ data class Post(
             val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
             val dateFormatted = dateFormat.parse(date) ?: Date()
 
+            var contentParsed: String = jsonObject.getString("cooked")
+                .replace("<p>", "")
+                .replace("</p>", "")
+
             return Post(
-                author = jsonObject.getString("username").toString(),
-                content = jsonObject.getString("cooked"),
+                author = jsonObject.getString("username"),
+                content = contentParsed,
                 date = dateFormatted
             )
         }

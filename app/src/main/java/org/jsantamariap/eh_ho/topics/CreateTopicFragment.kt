@@ -87,7 +87,7 @@ class CreateTopicFragment : Fragment() {
         super.onResume()
 
         username?.let {
-            inputAuthor.text = it
+            labelAuthor.text = it
         }
     }
 

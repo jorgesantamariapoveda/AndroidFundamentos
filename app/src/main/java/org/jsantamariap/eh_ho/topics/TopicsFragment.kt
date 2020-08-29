@@ -2,7 +2,6 @@ package org.jsantamariap.eh_ho.topics
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -75,9 +74,7 @@ class TopicsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         listTopics.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        // esto añade una linea tras cada topic
         listTopics.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-
         listTopics.adapter = topicsAdapter
 
         buttonCreateTopic.setOnClickListener {

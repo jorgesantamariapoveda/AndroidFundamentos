@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <androidx.cardview.widget.CardView
@@ -24,19 +24,22 @@
                 android:textStyle="bold"
                 tools:text="Author" />
 
-            <EditText
-                android:id="@+id/inputTitle"
+            <TextView
+                android:id="@+id/labelContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_title" />
+                android:textSize="16sp"
+                tools:text="Bla bla bla ..." />
 
-            <EditText
-                android:id="@+id/inputContent"
+            <TextView
+                android:id="@+id/labelDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="top"
-                android:hint="@string/hint_content"
-                android:minHeight="112dp" />
+                android:gravity="end"
+                android:textAlignment="textEnd"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                tools:text="31/12/2020" />
 
         </LinearLayout>
 

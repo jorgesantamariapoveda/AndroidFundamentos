@@ -101,21 +101,27 @@ object TopicsRepo {
 
     fun getPosts(
         id: String,
-        context: Context
+        context: Context,
+        onSuccess: (List<Post>) -> Unit,
+        onError: (RequestError) -> Unit
     ) {
         val request = JsonObjectRequest(
             Request.Method.GET,
             ApiRoutes.getPosts(id),
             null,
             {
-                var list = Post.parseTopicList(it)
-
+                val list = Post.parsePostList(it)
                 list.size
-
+                onSuccess(list)
             },
             {
                 it.printStackTrace()
-
+                val requestError =
+                    if (it is NetworkError)
+                        RequestError(it, messageResId = R.string.error_not_internet)
+                    else
+                        RequestError(it)
+                onError(requestError)
             }
         )
 
