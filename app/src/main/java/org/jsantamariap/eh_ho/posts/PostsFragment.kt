@@ -4,16 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_posts.*
-import kotlinx.android.synthetic.main.fragment_topics.*
 import org.jsantamariap.eh_ho.R
-import org.jsantamariap.eh_ho.data.Topic
 import org.jsantamariap.eh_ho.data.TopicsRepo
 import org.jsantamariap.eh_ho.inflate
-import org.jsantamariap.eh_ho.topics.TopicsAdapter
-import org.jsantamariap.eh_ho.topics.TopicsFragment
 import java.lang.IllegalArgumentException
 
 class PostsFragment(private val topicId: String) : Fragment() {
@@ -86,11 +81,17 @@ class PostsFragment(private val topicId: String) : Fragment() {
         super.onResume()
 
         loadPosts(topicId)
+
+        swipeRefreshLayout.setOnRefreshListener {
+            loadPosts(topicId)
+        }
     }
 
     // MARK: - Private functions
 
     private fun loadPosts(id: String) {
+        swipeRefreshLayout.isRefreshing = true
+
         context?.let {
             TopicsRepo.getPosts(
                 id,
@@ -100,6 +101,8 @@ class PostsFragment(private val topicId: String) : Fragment() {
                     postsAdapter.setPosts(list)
                     // avisa a la actividad para que haga lo que crea oportuno
                     this.postsInteractionListener?.onLoadPosts()
+                    // desactivar swiper
+                    swipeRefreshLayout.isRefreshing = false
                 },
                 {
                     it.volleyError?.printStackTrace()

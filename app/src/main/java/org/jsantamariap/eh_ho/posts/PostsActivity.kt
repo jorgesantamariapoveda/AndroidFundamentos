@@ -6,7 +6,6 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_posts.*
 import org.jsantamariap.eh_ho.R
 import org.jsantamariap.eh_ho.isFirsTimeCreated
-import org.jsantamariap.eh_ho.topics.CreateTopicFragment
 
 const val EXTRA_TOPIC_ID = "TOPIC_ID"
 const val TRANSACTION_CREATE_POST = "create_post"

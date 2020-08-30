@@ -92,6 +92,10 @@ class TopicsFragment : Fragment() {
         // Una vez tenemos los topics el momento apropiado para mostralos es cuando
         // ya están todos los elementos de la pantalla cargados, por lo tanto se hará en el onResume
         loadTopics()
+
+        swipeRefreshLayout.setOnRefreshListener {
+            loadTopics()
+        }
     }
 
     override fun onDetach() {
@@ -103,6 +107,7 @@ class TopicsFragment : Fragment() {
     // MARK: - Private functions
 
     private fun loadTopics() {
+        swipeRefreshLayout.isRefreshing = true
         containerListTopics.visibility = View.VISIBLE
         containerRetryTopics.visibility = View.INVISIBLE
 
@@ -112,10 +117,12 @@ class TopicsFragment : Fragment() {
                 {
                     topicsAdapter.setTopics(it)
                     this.topicsInteractionListener?.onLoadTopics()
+                    swipeRefreshLayout.isRefreshing = false
                 },
                 {
                     containerListTopics.visibility = View.INVISIBLE
                     containerRetryTopics.visibility = View.VISIBLE
+                    swipeRefreshLayout.isRefreshing = false
 
                     this.topicsInteractionListener?.onLoadTopics()
                 }
@@ -131,4 +138,5 @@ class TopicsFragment : Fragment() {
         fun onLogout()
         fun onLoadTopics()
     }
+
 }
