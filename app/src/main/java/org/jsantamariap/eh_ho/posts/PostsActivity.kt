@@ -29,14 +29,6 @@ class PostsActivity : AppCompatActivity(),
                 .add(R.id.fragmentContainer, PostsFragment(topicId))
                 .commit()
         }
-
-        /*
-        // ?: significa que si es null, devuelve lo que hay a su derecha
-        val topicId: String = intent.getStringExtra(EXTRA_TOPIC_ID) ?: ""
-        val topic: Topic? = TopicsRepo.getTopic(topicId)
-
-        TopicsRepo.getPosts(topicId, this.applicationContext)
-         */
     }
 
     override fun onResume() {
