@@ -14,13 +14,12 @@ contexto estático.
  */
 object TopicsRepo {
 
-    val topics: MutableList<Topic> = mutableListOf()
+    var topics: MutableList<Topic> = mutableListOf()
 
     fun getTopic(id: String): Topic? = topics.find {
         it.id == id
     }
 
-    // todo, onSuccess: (CreateTopicModel) -> Unit, idealmente debería devolver el model de datos del topico (2:23:35 sesión 7)
     fun addTopic(
         context: Context,
         model: CreateTopicModel,
@@ -81,6 +80,7 @@ object TopicsRepo {
             null,
             {
                 val list = Topic.parseTopicList(it)
+                topics = list.toMutableList()
                 onSuccess(list)
             },
             {
@@ -121,6 +121,55 @@ object TopicsRepo {
                         RequestError(it, messageResId = R.string.error_not_internet)
                     else
                         RequestError(it)
+                onError(requestError)
+            }
+        )
+
+        ApiRequestQueue
+            .getRequestQueue(context)
+            .add(request)
+    }
+
+    fun addPost(
+        context: Context,
+        model: CreatePostModel,
+        onSuccess: (CreatePostModel) -> Unit,
+        onError: (RequestError) -> Unit
+    ) {
+        val username = UserRepo.getUsername(context)
+        val request = PostRequest(
+            Request.Method.POST,
+            ApiRoutes.createPost(),
+            model.toJson(),
+            username,
+            {
+                onSuccess(model)
+            },
+            {
+                it.printStackTrace()
+
+                // para ver los tipos de errores es buena idea probar con Postman
+                val requestError =
+                    if (it is ServerError && it.networkResponse.statusCode == 422) {
+                        // primera opción
+                        // RequestError(it, messageResId = R.string.error_duplicated_topic)
+                        // segunda opción, sacar los errores que devuelve el servidor
+                        val bodyResponse = String(it.networkResponse.data, Charsets.UTF_8)
+                        val jsonError = JSONObject(bodyResponse)
+                        val errors = jsonError.getJSONArray("errors")
+                        var errorMessage = ""
+
+                        for (i in 0 until errors.length()) {
+                            errorMessage += "${errors[i]} "
+                        }
+
+                        RequestError(it, message = errorMessage)
+
+                    } else if (it is NetworkError) {
+                        RequestError(it, messageResId = R.string.error_not_internet)
+                    } else {
+                        RequestError(it)
+                    }
                 onError(requestError)
             }
         )

@@ -56,7 +56,7 @@ class TopicsFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_logout -> this.topicsInteractionListener?.onLogout()
+            R.id.actionLogout -> this.topicsInteractionListener?.onLogout()
         }
 
         return super.onOptionsItemSelected(item)

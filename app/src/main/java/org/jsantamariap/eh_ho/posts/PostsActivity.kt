@@ -7,14 +7,15 @@ import kotlinx.android.synthetic.main.activity_posts.*
 import org.jsantamariap.eh_ho.R
 import org.jsantamariap.eh_ho.isFirsTimeCreated
 import org.jsantamariap.eh_ho.topics.CreateTopicFragment
-import org.jsantamariap.eh_ho.topics.TRANSACTION_CREATE_TOPIC
 
 const val EXTRA_TOPIC_ID = "TOPIC_ID"
+const val TRANSACTION_CREATE_POST = "create_post"
 
 // Todas las activity tienen la propiedad intent
 
 class PostsActivity : AppCompatActivity(),
-    PostsFragment.PostsInteractionListener {
+    PostsFragment.PostsInteractionListener,
+    CreatePostFragment.CreatePostInteractionListener {
 
     // MARK: - Life cycle
 
@@ -46,19 +47,16 @@ class PostsActivity : AppCompatActivity(),
 
     // MARK: - Interface PostsFragment.PostsInteractionListener
 
-    // todo esto seguramente lo tenga que implementar
-    /*
-    override fun onCreateTopic() {
-        // crear pila con addToBackStack
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, CreatePostFragment())
-            .addToBackStack(TRANSACTION_CREATE_POST)
-            .commit()
-    }
-     */
-
     override fun onLoadPosts() {
         enableLoading(false)
+    }
+
+    override fun onCreatePost() {
+        val topicId: String = intent.getStringExtra(EXTRA_TOPIC_ID) ?: ""
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, CreatePostFragment(topicId))
+            .addToBackStack(TRANSACTION_CREATE_POST)
+            .commit()
     }
 
     // MARK: - Private functions
@@ -72,5 +70,11 @@ class PostsActivity : AppCompatActivity(),
             fragmentContainer.visibility = View.VISIBLE
             viewLoading.visibility = View.INVISIBLE
         }
+    }
+
+    // MARK: - Interface CreateTopicInteractionListener
+
+    override fun onPostCreated() {
+        supportFragmentManager.popBackStack()
     }
 }

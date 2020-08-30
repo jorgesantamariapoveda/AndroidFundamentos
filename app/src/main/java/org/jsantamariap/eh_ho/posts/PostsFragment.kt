@@ -2,9 +2,7 @@ package org.jsantamariap.eh_ho.posts
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +16,7 @@ import org.jsantamariap.eh_ho.topics.TopicsAdapter
 import org.jsantamariap.eh_ho.topics.TopicsFragment
 import java.lang.IllegalArgumentException
 
-class PostsFragment(val topicId: String) : Fragment() {
+class PostsFragment(private val topicId: String) : Fragment() {
 
     // MARK: - Properties
 
@@ -46,6 +44,26 @@ class PostsFragment(val topicId: String) : Fragment() {
         this.postsInteractionListener = null
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_posts, menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.actionAddTopic -> this.postsInteractionListener?.onCreatePost()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,8 +75,10 @@ class PostsFragment(val topicId: String) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // configuración RecyclerView
         listPosts.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        listPosts.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        // asignación de los datos por medio del adaptador. Dicho adaptador "adapta o convierte" nuestro modelo
+        // de datos al item visual
         listPosts.adapter = postsAdapter
     }
 
@@ -76,7 +96,9 @@ class PostsFragment(val topicId: String) : Fragment() {
                 id,
                 it.applicationContext,
                 { list ->
+                    // carga el recyclerView por medio del adapter
                     postsAdapter.setPosts(list)
+                    // avisa a la actividad para que haga lo que crea oportuno
                     this.postsInteractionListener?.onLoadPosts()
                 },
                 {
@@ -86,10 +108,10 @@ class PostsFragment(val topicId: String) : Fragment() {
         }
     }
 
-
     // MARK: - Interface PostsInteractionListener
 
     interface PostsInteractionListener {
         fun onLoadPosts()
+        fun onCreatePost()
     }
 }

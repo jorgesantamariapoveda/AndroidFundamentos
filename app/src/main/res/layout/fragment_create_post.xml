@@ -2,8 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:id="@+id/container"
     android:padding="16dp">
 
     <androidx.cardview.widget.CardView
@@ -17,31 +17,20 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/labelAuthor"
+                android:id="@+id/labelTopic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                tools:text="Author" />
+                tools:text="Topic" />
 
-            <TextView
-                android:id="@+id/labelContent"
+            <EditText
+                android:id="@+id/inputContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:textSize="16sp"
-                tools:text="Bla bla bla ..." />
-
-            <TextView
-                android:id="@+id/labelDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:textAlignment="textEnd"
-                android:textSize="14sp"
-                android:textStyle="italic"
-                tools:text="31/12/2020" />
+                android:gravity="top"
+                android:hint="@string/hint_content"
+                android:minHeight="112dp" />
 
         </LinearLayout>
 

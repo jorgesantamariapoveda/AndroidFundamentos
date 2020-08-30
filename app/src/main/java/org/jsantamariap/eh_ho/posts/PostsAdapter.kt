@@ -7,6 +7,7 @@ import kotlinx.android.synthetic.main.item_post.view.*
 import org.jsantamariap.eh_ho.R
 import org.jsantamariap.eh_ho.data.Post
 import org.jsantamariap.eh_ho.inflate
+import java.text.SimpleDateFormat
 
 class PostsAdapter : RecyclerView.Adapter<PostsAdapter.PostHolder>() {
 
@@ -52,7 +53,9 @@ class PostsAdapter : RecyclerView.Adapter<PostsAdapter.PostHolder>() {
                 field?.let {
                     itemView.labelAuthor.text = field?.author
                     itemView.labelContent.text = it.content
-                    itemView.labelDate.text = it.date.toString()
+
+                    val dateFormat = SimpleDateFormat("dd-MM-yyyy")
+                    itemView.labelDate.text = dateFormat.format(it.date).toString()
                 }
             }
         }

@@ -44,6 +44,12 @@ object ApiRoutes {
             .build()
             .toString()
 
+    fun createPost() =
+        uriBuilder()
+            .appendPath("posts")
+            .build()
+            .toString()
+
     private fun uriBuilder() =
         Uri.Builder()
             .scheme("https")
