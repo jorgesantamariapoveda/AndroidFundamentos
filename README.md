@@ -3,7 +3,7 @@ Cliente Android en Kotlin para la plataforma web discourse.org
 
 ## Especificaciones
 
-- Formulario de entrada para signin y signup, validando que los campos incorrectos se muestre una etiqueta de error.
+- Formulario de entrada para signin y signup, validando que en los campos incorrectos se muestre una etiqueta de error.
 - Listado de topics (petición GET)
 - Creación de nuevos topics (petición POST)
 - Listado de posts por topics (petición GET)
