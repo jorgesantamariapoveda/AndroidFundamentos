@@ -19,6 +19,8 @@ Cliente Android en Kotlin para la plataforma web discourse.org
 - Pull to refresh para el listado de topics y posts
 - Ocultar botón de creación de tópico al hacer scroll en el listado
 
+##### Capturas de pantallas
+
 ![signin](./signin.png "SignIn")
 ![signup](./signup.png "SignUp")
 ![topics](./topics.png "Listado de topics")
