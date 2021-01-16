@@ -1,12 +1,13 @@
-# Práctica de Fundamentos Android
+## Objetivo
+Asentar los **fundamentos de Android** y **Kotlin** a partir del desarrollo de una aplicación que hará uso de los servicios que presta el API de Discourse.
 
-Cliente Android en Kotlin para la plataforma web discourse.org
-
-## Tecnologías
-
-- Android Studio
 - Kotlin
-- Activity, Fragments, RecyclerView, Volley, Json
+- Activity, Fragments
+- Intent
+- RecyclerView
+- Volley, Json
+- Android Studio
+- [Discourse API](https://docs.discourse.org/)
 
 ## Especificaciones
 
